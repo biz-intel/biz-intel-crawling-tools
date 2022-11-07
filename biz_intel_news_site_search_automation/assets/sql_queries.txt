@@ -1,0 +1,38 @@
+{
+    CREATE TABLE `news`.`biz_intel_fourth_valution`(
+                                                    `id` INT NOT NULL AUTO_INCREMENT , 
+                                                    `site` VARCHAR(50) NOT NULL,
+                                                    `link` VARCHAR(255) NOT NULL,
+                                                    `key_word` VARCHAR(50) NOT NULL,
+                                                    `title` TINYTEXT NOT NULL,
+                                                    `img` VARCHAR(255) NOT NULL,
+                                                    `body` LONGTEXT NOT NULL,
+                                                    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                                    `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                                    PRIMARY KEY (`id`),
+                                                    UNIQUE (`link`)
+                                                    )
+                                                    ENGINE = InnoDB;
+}
+{
+    CREATE TABLE `news`.`logs` (
+                                `id` INT NOT NULL AUTO_INCREMENT ,
+                                `site` VARCHAR(255) NOT NULL ,
+                                `key_word` VARCHAR(255) NOT NULL ,
+                                `error` TEXT NOT NULL ,
+                                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+                                PRIMARY KEY (`id`)
+                                )
+                                ENGINE = InnoDB;
+}
+{
+    CREATE TABLE `news`.`count_logs`(
+                                    `id` INT NOT NULL AUTO_INCREMENT ,
+                                    `site` VARCHAR(255) NOT NULL ,
+                                    `key_word` VARCHAR(255) NOT NULL ,
+                                    `inserted` INT NOT NULL ,
+                                    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+                                    PRIMARY KEY (`id`)
+                                    )
+                                    ENGINE = InnoDB;
+}

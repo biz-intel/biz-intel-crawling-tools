@@ -1,0 +1,21 @@
+{
+    CREATE TABLE `tweets`.`usdtweets` (
+        `id` INT NOT NULL AUTO_INCREMENT , 
+        `user_id` VARCHAR(255) NOT NULL , 
+        `tweet_link` VARCHAR(255) NOT NULL , 
+        `key_word` VARCHAR(255) NOT NULL , 
+        `tweet_text` LONGTEXT NOT NULL , 
+        `tweeted_date` Timestamp not null,
+        `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , 
+        `updated_at` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , 
+        PRIMARY KEY (`id`), UNIQUE (`tweet_link`)) 
+        ENGINE = InnoDB;
+    CREATE TABLE `logs`.`tweet` (
+        `id` INT NOT NULL AUTO_INCREMENT , 
+        `keyword` VARCHAR(255) NOT NULL , 
+        `error` TEXT NOT NULL , 
+        `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , 
+        PRIMARY KEY (`id`)) 
+        ENGINE = InnoDB;
+
+}
