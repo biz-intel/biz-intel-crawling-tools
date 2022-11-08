@@ -1,1 +1,4 @@
 *.pyc
+.env
+*.exe
+*.dmg

@@ -1,8 +1,12 @@
 import os
+import sys
 import time
 import random
 import requests
 import mysql.connector as connector
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 from modules.gogo                               import gogo
 from modules.ikon                               import ikon
@@ -13,24 +17,36 @@ from modules.sonin                              import sonin
 from modules.updown                             import updown
 from modules.zindaa                             import zindaa
 
+from dotenv                                     import load_dotenv
 from random                                     import randint
 from datetime                                   import datetime
 from bs4                                        import BeautifulSoup
 from selenium                                   import webdriver
 from selenium.webdriver.common.by               import By
-from assets.database                            import database
+from database                                   import database
 from selenium.webdriver.common.action_chains    import ActionChains
 from mysql.connector.errors                     import IntegrityError
 from selenium.common.exceptions                 import WebDriverException
 from selenium.common.exceptions                 import StaleElementReferenceException
 
 
+curr_path = './assets/'
+os.environ['PATH'] = r"".join(curr_path)
 
-os.environ['PATH'] = r"C:\Assets"
 
-db_connection = database(host_name = 'localhost', user_name = 'root', user_password = '', database_name = 'news', table_name = 'biz_intel_fourth_valution', mysql_connector = connector, integrity_error = IntegrityError)
+load_dotenv()
 
-def start(queries:list):
+db_connection = database(
+                    host_name       =   os.getenv('host'),
+                    user_name       =   os.getenv('username'),
+                    user_password   =   os.getenv('password'),
+                    database_name   =   os.getenv('database'),
+                    table_name      =   'biz_intel_fourth_valution',
+                    mysql_connector = connector,
+                    integrity_error = IntegrityError)
+queries = os.getenv('key_words').split(' ')
+
+def start():
     options = webdriver.ChromeOptions()
     options.add_experimental_option('excludeSwitches',['enable-logging'])
     driver = webdriver.Chrome(options = options)
@@ -143,3 +159,8 @@ def start(queries:list):
             time.sleep(randint(1, 4))
         print("->   Дууссан цаг:", datetime.now())
     driver.close()
+
+class news_configs:
+    
+    def run(self):
+        start()
