@@ -12,9 +12,21 @@
                 "id": 3
             }
         },
-        "facebook": {},
-        "instagram": {},
-        "linkedin": {},
+        "facebook": {
+            "facebook_data": {
+                "id": 0
+            }
+        },
+        "instagram": {
+            "instagram": {
+                "id": 0
+            }
+        },
+        "linkedin": {
+            "linkedin": {
+                "id": 0
+            }
+        },
         "twitter": {
             "tweet_data": {
                 "id": 4

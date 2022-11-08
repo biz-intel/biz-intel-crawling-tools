@@ -29,9 +29,7 @@ from mysql.connector.errors                     import IntegrityError
 from selenium.common.exceptions                 import WebDriverException
 from selenium.common.exceptions                 import StaleElementReferenceException
 
-
-curr_path = './assets/'
-os.environ['PATH'] = r"".join(curr_path)
+os.environ['PATH'] = r"".join('./assets/')
 
 
 load_dotenv()
@@ -43,7 +41,9 @@ db_connection = database(
                     database_name   =   os.getenv('database'),
                     table_name      =   'biz_intel_fourth_valution',
                     mysql_connector = connector,
-                    integrity_error = IntegrityError)
+                    integrity_error = IntegrityError
+                    )
+
 queries = os.getenv('key_words').split(' ')
 
 def start():
