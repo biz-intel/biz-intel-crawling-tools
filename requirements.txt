@@ -1,8 +1,0 @@
-beautifulsoup4
-facebook-scraper
-insta-scraper
-linkedin-scraper
-mysql-connector-python
-requests
-selenium
-snscrape
