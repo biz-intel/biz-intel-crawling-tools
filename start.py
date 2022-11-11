@@ -1,5 +1,3 @@
-import assets.configure as configure
+from assets.configure import configs
 
-# queries = ['доллар', 'долларын', 'ханш', 'ханшны', 'ханшийн', 'эдийн засаг', 'эдийн засгийн', 'хил', 'бензин', 'бензиний', 'үнэ', 'үнийн', 'валют', 'валютын']
-queries = ['бензин']
-configure.start(queries = queries)
+configs().run()

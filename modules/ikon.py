@@ -1,5 +1,5 @@
 class ikon:
-    def __init__(self, query, connection, driver, By, bs4, randint, requests, time, exception, action):
+    def __init__(self, query, connection, driver, By, bs4, randint, requests, time, exception, action, callback):
         self.query = query
         self.connection = connection
         self.all_links = []
@@ -13,6 +13,7 @@ class ikon:
         self.time = time
         self.exception = exception
         self.action = action
+        self.callback = callback
     
     def get_links(self):
         links = []
@@ -50,21 +51,25 @@ class ikon:
         for links in self.all_links:
             for link in links:
                 try:
-                    req = self.requests.get(link)
+                    req = self.requests.get('https://ikon.mn/n/2gsk')
                     bs = self.bs4(req.text, "html.parser") 
                     news_div = bs.find('div', class_='inews')
-                    title = (news_div.find('h1')).text
+                    title = (news_div.find('h1')).text.strip()
                     body_div = news_div.find('div', class_='icontent')
                     img = (body_div.find('img')).get('src')
                     body = ''
                     p_tags = body_div.find_all('p')
                     for p in p_tags:
-                        body+=p.text
-                    self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query)
+                        body+=p.text.strip()
+                    news_created = bs.find('div', class_='time').text.strip().replace(' ', '').replace('оны', '-').replace('сарын', '-')
+                    news_created = self.callback(news_created)
+
+                    self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query, news_created=news_created)
                     self.time.sleep(self.random(1,3))
                     
                 except AttributeError as err:
                     self.connection.insert_error_logs(site = self.site, key_word = self.query, error = str(err))
                     continue
+            break
         self.connection.insert_count_logs(site=self.site, key_word=self.query)
         print("->       Ажмилттай дууслаа!      .......", self.connection.get_inserted(), "тооны мэдээ цуглалаа...!")

@@ -1,45 +1,8 @@
 # Мэдээний сайтаас мэдээнүүд цуглуулах script
 
-# Хөгжүүлэлтийн орчин бэлтгэх
-
-# VScode суулгах
-    https://code.visualstudio.com/download
-
-
-# Windows үйлдлийн систем
-# mysql server суулгах
-    https://www.apachefriends.org/download.html
-# python хэл суулгах
-    https://www.python.org/downloads/
-# git bash суулгах
-    https://git-scm.com/download/win
-# python хэлний package manager суулгах
-    python -m pip install -U pip
-
-# Linux үйлдлийн систем
-# mysql server суулгах
-    sudo apt update & sudo apt install mysql-server & sudo systemctl start mysql.service
-# python хэлний package manager суулгах
-    sudo apt-get install python3-pip
-
-# Mac үйлдлийн систем
-# home brew суулгах
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-# mysql server суулгах
-    brew install mysql
-    brew services start mysql
-# python хэлний package manager суулгах
-    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-    python3 get-pip.py
-
-# Python хэлний сан суулгах
-    pip install requests
-    pip install selenium
-    pip install beautifulsoup4
-    pip install mysql-connector-python
-
 # Түлхүүр үгнүүд оруулах
-    start.py файл дотор queries гэсэн хувьсагчид list төрлөөр түлхүүр үгнүүд оруулна
+    .env.example файл хуулж .evn файл үүсгэх 
+    .envфайл дотор key_words дотор түлхүүр үгнүүд , тэмдгээр тусгаарлан оруулна
 
 # Start файл ажиллуулах
     python3 start.py

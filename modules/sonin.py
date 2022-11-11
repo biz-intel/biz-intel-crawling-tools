@@ -1,5 +1,5 @@
 class sonin:
-    def __init__(self, query, connection, driver, By, bs4, randint, requests, time, exception, action):
+    def __init__(self, query, connection, driver, By, bs4, randint, requests, time, exception, action, callback):
         self.query = query
         self.connection = connection
         self.all_links = []
@@ -13,6 +13,7 @@ class sonin:
         self.time = time
         self.exception = exception
         self.action = action
+        self.callback = callback
         
     def get_links(self):
         links = []
@@ -41,7 +42,6 @@ class sonin:
                 pass
             except IndexError as err:
                 pass
-            break
         
         print("->       Амжилттай авлаа.......................")
         print("->       Мэдээнүүдийг татаж байна..............")
@@ -50,10 +50,13 @@ class sonin:
                 response = self.requests.get(link)
                 bs = self.bs4(response.text, "html.parser")
                 try:
-                    title = (bs.find('h3', class_='title')).text.strip()
-                    img = (bs.find('img', class_='img-responsive')).text.strip()
-                    body = (bs.find('div', class_='sonin-nctext')).text.strip()
-                    self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query)
+                    title = bs.find('h3', class_='title').text.strip()
+                    img = bs.find('img', class_='img-responsive').text.strip()
+                    body = bs.find('div', class_='sonin-nctext').text.strip()
+                    news_created = bs.find('span', class_='dateago red').text
+                    news_created = self.callback(news_created)
+
+                    self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query, news_created=news_created)
                     self.time.sleep(self.random(1, 3))
                 except AttributeError as err:
                     self.connection.insert_error_logs(site = self.site, key_word = self.query, error = str(err))

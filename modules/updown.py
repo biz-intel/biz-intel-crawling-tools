@@ -1,5 +1,5 @@
 class updown:
-    def __init__(self, query, action, connection, driver, By, bs4, randint, requests, time, exception):
+    def __init__(self, query, action, connection, driver, By, bs4, randint, requests, time, exception, callback):
         self.query = query
         self.connection = connection
         self.links=[]
@@ -13,6 +13,7 @@ class updown:
         self.requests = requests
         self.time = time
         self.exception = exception
+        self.callback = callback
         
     def start_download(self):
         def wait(duration = 30):
@@ -41,11 +42,14 @@ class updown:
             response = self.requests.get(link)
             bs = self.bs4(response.text, "html.parser")
             try:
-                title = (bs.find('span', class_='headline')).text
+                title = (bs.find('span', class_='headline')).text.strip()
                 image_div = bs.find('div', class_='btRegularMediaPosition')
                 img =( image_div.find('img')).get('src')
-                body = (bs.find('div', class_='bt_bb_wrapper')).text
-                self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query)
+                body = (bs.find('div', class_='bt_bb_wrapper')).text.strip()
+                news_created = bs.find('span', class_='btArticleDate').text.strip()
+                news_created = self.callback(news_created)
+
+                self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query, news_created=news_created)
                 self.time.sleep(self.random(1, 3))
             except AttributeError as err:
                 self.connection.insert_error_logs(site = self.site, key_word = self.query, error = str(err))
