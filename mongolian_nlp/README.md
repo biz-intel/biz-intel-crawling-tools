@@ -1,1 +1,0 @@
-# Mongolian language nlp using nltk
