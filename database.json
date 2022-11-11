@@ -1,25 +1,10 @@
 {
     "table_name": "query",
     "query_id": {
-        "news_site": {
-            "news_data": {
-                "id": 1
-            },
-            "error_data": {
-                "id": 2
-            },
-            "count_data": {
-                "id": 3
-            }
-        },
-        "facebook": {},
-        "instagram": {},
-        "linkedin": {},
         "twitter": {
             "tweet_data": {
                 "id": 4
             }
-        },
-        "text_processing": {}
+        }
     }
 }
