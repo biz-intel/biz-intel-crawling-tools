@@ -14,6 +14,7 @@ class twitter:
             for f in filters:
                 query = query + ' -filter:'+f
         for tweet in self.sntwitter.TwitterSearchScraper(query).get_items():
-            self.connection.insert_tweets(vars(tweet)['user'].id, vars(tweet)['url'], vars(tweet)['content'], self.key_word, str(vars(tweet)['date']))
-        print('->       Татагдсан:', self.connection.get_counts()['inserted'])
-        print('->       Давхардсан:', self.connection.get_counts()['duplicated'])
+            pass
+            # self.connection.insert_tweets(vars(tweet)['user'].id, vars(tweet)['url'], vars(tweet)['content'], self.key_word, str(vars(tweet)['date']))
+        print('->           Татагдсан жиргээний тоо:', self.connection.get_counts()['inserted'])
+        print('->           Давхардсан жиргээний тоо:', self.connection.get_counts()['duplicated'])
