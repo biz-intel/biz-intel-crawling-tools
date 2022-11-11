@@ -6,12 +6,4 @@ mysql-connector-python
 requests
 selenium
 snscrape
-matplotlib
-nltk
-pandas
-numpy
-seaborn
-scipy
-scikit-learn
-textblob
 python-dotenv
