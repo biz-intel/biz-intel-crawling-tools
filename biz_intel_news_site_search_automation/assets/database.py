@@ -19,10 +19,10 @@ class database:
     def reset_count(self):
         self.inserted = 0
 
-    def insert_data(self, title:str, img:str, body:str, site:str, link:str, key_word:str):
+    def insert_data(self, title:str, img:str, body:str, site:str, link:str, key_word:str, news_created:str):
         try:
-            sql = 'insert into '+self.table_name+'(title, img, body, site, link, key_word)values(%s,%s,%s,%s,%s, %s)'
-            val = [title, img, body, site, link, key_word]
+            sql = 'insert into '+self.table_name+'(title, img, body, site, link, key_word, news_created_date)values(%s,%s,%s,%s,%s, %s, %s)'
+            val = [title, img, body, site, link, key_word, news_created]
             self.commit(sql = sql, val = val)
             self.inserted += 1
         except self.error:

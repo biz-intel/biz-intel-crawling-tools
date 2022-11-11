@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import random
+import datetime
 import requests
 import mysql.connector as connector
 
@@ -20,10 +21,11 @@ from modules.zindaa                             import zindaa
 from dotenv                                     import load_dotenv
 from random                                     import randint
 from datetime                                   import datetime
+from datetime                                   import timedelta
 from bs4                                        import BeautifulSoup
 from selenium                                   import webdriver
 from selenium.webdriver.common.by               import By
-from database                                   import database
+from assets.database                            import database
 from selenium.webdriver.common.action_chains    import ActionChains
 from mysql.connector.errors                     import IntegrityError
 from selenium.common.exceptions                 import WebDriverException
@@ -36,7 +38,7 @@ load_dotenv()
 
 db_connection = database(
                     host_name       =   os.getenv('host'),
-                    user_name       =   os.getenv('username'),
+                    user_name       =   os.getenv('user_name'),
                     user_password   =   os.getenv('password'),
                     database_name   =   os.getenv('database'),
                     table_name      =   'biz_intel_fourth_valution',
@@ -44,7 +46,32 @@ db_connection = database(
                     integrity_error = IntegrityError
                     )
 
-queries = os.getenv('key_words').split(' ')
+queries = os.getenv('key_words').split(sep=(','))
+def format_date(news_created)->str:
+    news_created = news_created.lower()
+    if news_created[1] ==' ':
+        news_created = '0' + news_created
+    if 'өчигдөр' in news_created:
+        news_created = datetime.now()-timedelta(days=1)
+    elif 'минутын' in news_created:
+        news_created = datetime.now()-timedelta(minutes=int(news_created[:2:]))
+    elif 'цагийн' in news_created:
+        news_created = datetime.now()-timedelta(hours=int(news_created[:2:]))
+    elif 'өдрийн' in news_created:
+        news_created = datetime.now()-timedelta(days=int(news_created[:2:]))
+    try:
+        news_created = datetime.strftime(news_created, '%Y-%m-%d')
+    except ValueError:
+        news_created = datetime.strftime(news_created, '%Y.%m.%d')
+    except TypeError:
+        try:
+            news_created = datetime.strftime(datetime.strptime(news_created, '%Y-%m-%d %H:%M'), '%Y-%m-%d')
+        except ValueError:
+            try:
+                news_created = datetime.strftime(datetime.strptime(news_created, '%Y-%m-%d'), '%Y-%m-%d')
+            except ValueError:
+                news_created = datetime.strftime(datetime.strptime(news_created, '%Y.%m.%d'), '%Y.%m.%d')
+    return news_created
 
 def start():
     options = webdriver.ChromeOptions()
@@ -67,6 +94,7 @@ def start():
                         time = time,
                         exception = None, 
                         action = action,
+                        callback = format_date
                     ),
             ikon    ( 
                         query = query,
@@ -78,7 +106,8 @@ def start():
                         requests = requests,
                         time = time,
                         exception = StaleElementReferenceException,
-                        action = None
+                        action = None,
+                        callback = format_date
                     ),
             isee    ( 
                         query = query,
@@ -90,8 +119,8 @@ def start():
                         requests = requests,
                         time = time,
                         exception = WebDriverException,  
-                        
                         action = action,
+                        callback = format_date
                     ),
             medee   ( 
                         query = query,
@@ -104,6 +133,7 @@ def start():
                         time = time,
                         exception = WebDriverException, 
                         action = action,
+                        callback = format_date
                     ),
             news    ( 
                         query = query,
@@ -115,7 +145,8 @@ def start():
                         requests = requests,
                         time = time,
                         exception = StaleElementReferenceException,
-                        action = None
+                        action = None,
+                        callback = format_date
                     ),
             sonin   ( 
                         query = query,
@@ -127,7 +158,8 @@ def start():
                         requests = requests,
                         time = time,
                         exception = StaleElementReferenceException,
-                        action = None
+                        action = None,
+                        callback = format_date
                     ),
             updown  ( 
                         query = query,
@@ -140,6 +172,7 @@ def start():
                         time = time,
                         exception = WebDriverException, 
                         action = action,
+                        callback = format_date
                     ),
             zindaa  ( 
                         query = query,
@@ -151,7 +184,8 @@ def start():
                         requests = requests,
                         time = time,
                         exception = WebDriverException, 
-                        action=None,
+                        action = None,
+                        callback = format_date
                     ),
                     ]
         for scraper in scrapers:

@@ -1,5 +1,5 @@
 class isee:
-    def __init__(self, query, action, connection, driver, By, bs4, randint, requests, time, exception):
+    def __init__(self, query, action, connection, driver, By, bs4, randint, requests, time, exception, callback):
         self.query = query
         self.connection = connection
         self.links=[]
@@ -13,6 +13,7 @@ class isee:
         self.requests = requests
         self.time = time
         self.exception = exception
+        self.callback = callback
         
     def start_download(self):
         def wait(duration = 30):
@@ -44,11 +45,14 @@ class isee:
             try:
                 response = self.requests.get(link)
                 bs = self.bs4(response.text, "html.parser")
-                title = (bs.find('h1', class_='title')).text
+                title = (bs.find('h1', class_='title')).text.strip()
                 image_div = bs.find('figure', class_='image')
                 img = (image_div.find('img')).get('src')
-                body = (bs.find('div', class_='content-div')).text
-                self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query)
+                body = (bs.find('div', class_='content-div')).text.strip()
+                news_created = bs.find('span', class_='meta-date').text.strip()
+                news_created = self.callback(news_created)
+
+                self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query, news_created=news_created)
             except AttributeError as err:
                 self.connection.insert_error_logs(site = self.site, key_word = self.query, error = str(err))
                 continue

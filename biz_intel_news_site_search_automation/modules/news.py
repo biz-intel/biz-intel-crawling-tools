@@ -1,5 +1,5 @@
 class news:
-    def __init__(self, query, connection, driver, By, bs4, randint, requests, time, exception, action):
+    def __init__(self, query, connection, driver, By, bs4, randint, requests, time, exception, action, callback):
         self.query = query
         self.connection = connection
         self.all_links = []
@@ -13,6 +13,7 @@ class news:
         self.time = time
         self.exception = exception
         self.action = action
+        self.callback = callback
 
     def get_links(self):
         links = []
@@ -59,13 +60,17 @@ class news:
                 response = self.requests.get(link)
                 bs = self.bs4(response.text, "html.parser")
                 try:
-                    title = (bs.find_all('h1', class_="entry-title"))[0].get_text()
+                    title = (bs.find_all('h1', class_="entry-title"))[0].get_text().strip()
                     img = (bs.find('img', class_='attachment-newsmn_top_big_one size-newsmn_top_big_one wp-post-image')).get('src')
-                    body = (bs.find('div', class_='has-content-area')).text
-                    self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query)
+                    body = (bs.find('div', class_='has-content-area')).text.strip()
+                    news_created = bs.find('span', class_='entry-date').text.strip()
+                    news_created = self.callback(news_created)
+
+                    self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query, news_created=news_created)
                     self.time.sleep(self.random(1, 3))
                 except AttributeError as err:
                     self.connection.insert_error_logs(site = self.site, key_word = self.query, error = str(err))
                     continue
+            break
         self.connection.insert_count_logs(site=self.site, key_word=self.query)
         print("->       Ажмилттай дууслаа!      .......", self.connection.get_inserted(), "тооны мэдээ цуглалаа...!")
