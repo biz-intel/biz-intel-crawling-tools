@@ -1,5 +1,5 @@
 class zindaa:
-    def __init__(self, query, connection, driver, By, bs4, randint, requests, time, exception, action):
+    def __init__(self, query, connection, driver, By, bs4, randint, requests, time, exception, action, callback):
         self.query = query
         self.connection = connection
         self.links=[]
@@ -13,6 +13,7 @@ class zindaa:
         self.time = time
         self.exception = exception
         self.action = action
+        self.callback = callback
         
     def start_download(self):
         def wait(duration = 30):
@@ -43,10 +44,14 @@ class zindaa:
             bs = self.bs4(response.text, "html.parser")
             try:
                 parent_div = bs.find('div', class_='news-more-area')
-                title = (parent_div.find('h1')).text
+                title = (parent_div.find('h1')).text.strip()
                 img = (parent_div.find('img')).get('src')
-                body = (parent_div.find('div', class_='desc')).text
-                self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query)
+                body = (parent_div.find('div', class_='desc')).text.strip()
+                date_parent_div = parent_div.find('div', class_='pull-left')
+                news_created = date_parent_div.find_all('span')[1].text.strip()
+                news_created = self.callback(news_created)
+
+                self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query, news_created=news_created)
                 self.time.sleep(self.random(1, 3))
             except AttributeError as err:
                 self.connection.insert_error_logs(site = self.site, key_word = self.query, error = str(err))

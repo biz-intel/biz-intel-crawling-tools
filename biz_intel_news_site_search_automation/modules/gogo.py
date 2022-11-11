@@ -1,5 +1,5 @@
 class gogo:
-    def __init__(self, query, action, connection, driver, By, bs4, randint, requests, time, exception):
+    def __init__(self, query, action, connection, driver, By, bs4, randint, requests, time, exception, callback):
         self.query = query
         self.connection = connection
         self.links = []
@@ -13,6 +13,7 @@ class gogo:
         self.requests = requests
         self.time = time
         self.exception = exception
+        self.callback = callback
         
     def start_download(self):
         def wait(duration = 30):
@@ -46,13 +47,18 @@ class gogo:
             response = self.requests.get(link)
             bs = self.bs4(response.text, "html.parser")
             try:
+                print(link)
                 title_div = bs.find_all('h2', class_ = "news-detail-title")
                 title = (title_div[0].get_text()).strip()
                 image_a = bs.find('a', class_='gogo-zoom')
                 a = self.bs4(str(image_a), "html.parser")
                 img = (a.find('img')).get('src')
                 body = (bs.find('div', class_='news-cont-container')).text.strip()
-                self.connection.insert_data(title = title, img = img, body = body, site = self.site, link = link, key_word = self.query)
+                date_div = bs.find('div', class_='content-detail-author-container')
+                news_created = date_div.find('span').text.strip()
+                news_created = self.callback(news_created)
+
+                self.connection.insert_data(title = title, img = img, body = body, site = self.site, link = link, key_word = self.query, news_created = news_created)
             except AttributeError as err:
                 self.connection.insert_error_logs(site = self.site, key_word = self.query, error = str(err))
                 continue
