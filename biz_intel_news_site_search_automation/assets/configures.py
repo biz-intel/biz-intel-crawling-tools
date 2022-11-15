@@ -37,10 +37,10 @@ os.environ['PATH'] = r"".join('./assets/')
 load_dotenv()
 
 db_connection = database(
-                    host_name       =   os.getenv('host'),
-                    user_name       =   os.getenv('user_name'),
-                    user_password   =   os.getenv('password'),
-                    database_name   =   os.getenv('database'),
+                    host_name       =   os.getenv('database_host'),
+                    user_name       =   os.getenv('database_username'),
+                    user_password   =   os.getenv('database_password'),
+                    database_name   =   os.getenv('database_name'),
                     table_name      =   'biz_intel_fourth_valution',
                     mysql_connector = connector,
                     integrity_error = IntegrityError
