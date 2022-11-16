@@ -4,6 +4,7 @@ import time
 import random
 import datetime
 import requests
+import threading
 import mysql.connector as connector
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -37,16 +38,17 @@ os.environ['PATH'] = r"".join('./assets/')
 load_dotenv()
 
 db_connection = database(
-                    host_name       =   os.getenv('host'),
-                    user_name       =   os.getenv('user_name'),
-                    user_password   =   os.getenv('password'),
-                    database_name   =   os.getenv('database'),
+                    host_name       =   os.getenv('database_host'),
+                    user_name       =   os.getenv('database_username'),
+                    user_password   =   os.getenv('database_password'),
+                    database_name   =   os.getenv('database_name'),
                     table_name      =   'biz_intel_fourth_valution',
                     mysql_connector = connector,
                     integrity_error = IntegrityError
                     )
 
-queries = os.getenv('key_words').split(sep=(','))
+key_words = os.getenv('key_words').split(sep=(','))
+
 def format_date(news_created)->str:
     news_created = news_created.lower()
     if news_created[1] ==' ':
@@ -73,18 +75,20 @@ def format_date(news_created)->str:
                 news_created = datetime.strftime(datetime.strptime(news_created, '%Y.%m.%d'), '%Y.%m.%d')
     return news_created
 
-def start():
+def start(key_word):
+
     options = webdriver.ChromeOptions()
     options.add_experimental_option('excludeSwitches',['enable-logging'])
     driver = webdriver.Chrome(options = options)
     action = ActionChains(driver)
-    for query in queries:
-        print("*************************************************")
-        print("->   Түлхүүр үг:", query)
-        print("->   Эхэлсэн цаг:", datetime.now())
-        scrapers =  [
+    
+    print("*************************************************")
+    print("->   Түлхүүр үг:", key_word)
+    print("->   Эхэлсэн цаг:", datetime.now())
+
+    scrapers =  [
             gogo    ( 
-                        query = query,
+                        query = key_word,
                         connection = db_connection,
                         driver = driver,
                         By = By,
@@ -97,7 +101,7 @@ def start():
                         callback = format_date
                     ),
             ikon    ( 
-                        query = query,
+                        query = key_word,
                         connection = db_connection,
                         driver = driver,
                         By = By,
@@ -110,7 +114,7 @@ def start():
                         callback = format_date
                     ),
             isee    ( 
-                        query = query,
+                        query = key_word,
                         connection = db_connection,
                         driver = driver,
                         By = By,
@@ -123,7 +127,7 @@ def start():
                         callback = format_date
                     ),
             medee   ( 
-                        query = query,
+                        query = key_word,
                         connection = db_connection,
                         driver = driver,
                         By = By,
@@ -136,7 +140,7 @@ def start():
                         callback = format_date
                     ),
             news    ( 
-                        query = query,
+                        query = key_word,
                         connection = db_connection,
                         driver = driver,
                         By = By,
@@ -149,7 +153,7 @@ def start():
                         callback = format_date
                     ),
             sonin   ( 
-                        query = query,
+                        query = key_word,
                         connection = db_connection,
                         driver = driver,
                         By = By,
@@ -162,7 +166,7 @@ def start():
                         callback = format_date
                     ),
             updown  ( 
-                        query = query,
+                        query = key_word,
                         connection = db_connection,
                         driver = driver,
                         By = By,
@@ -175,26 +179,30 @@ def start():
                         callback = format_date
                     ),
             zindaa  ( 
-                        query = query,
-                        connection = db_connection,
-                        driver = driver,
-                        By = By,
-                        bs4 = BeautifulSoup,
-                        randint = random.randint,
-                        requests = requests,
-                        time = time,
-                        exception = WebDriverException, 
-                        action = None,
-                        callback = format_date
-                    ),
-                    ]
-        for scraper in scrapers:
-            scraper.start_download()
-            time.sleep(randint(1, 4))
-        print("->   Дууссан цаг:", datetime.now())
+                    query = key_word,
+                    connection = db_connection,
+                    driver = driver,
+                    By = By,
+                    bs4 = BeautifulSoup,
+                    randint = random.randint,
+                    requests = requests,
+                    time = time,
+                    exception = WebDriverException, 
+                    action = None,
+                    callback = format_date
+                ),
+            ]
+    
+    for scraper in scrapers:
+        scraper.start_download()
+        time.sleep(randint(1, 4))
+    
+    print("->   Дууссан цаг:", datetime.now())
     driver.close()
 
 class news_configs:
-    
+
     def run(self):
-        start()
+        for key_word in key_words:
+            thread = threading.Thread(target=start, args=[key_word])
+            thread.start()

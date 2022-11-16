@@ -17,10 +17,10 @@ load_dotenv()
 queries = os.getenv('key_words').split(',')
 
 my_connector = connector.connect(
-    host     = os.getenv('host'),
-    user     = os.getenv('user_name'),
-    password = os.getenv('password'),
-    database = os.getenv('database'),
+    host     = os.getenv('database_host'),
+    user     = os.getenv('database_username'),
+    password = os.getenv('database_password'),
+    database = os.getenv('database_name'),
 )
 def get_time()->str:
     return datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
