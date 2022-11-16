@@ -52,7 +52,7 @@ class sonin:
                 try:
                     title = bs.find('h3', class_='title').text.strip()
                     img = bs.find('img', class_='img-responsive').text.strip()
-                    body = bs.find('div', class_='sonin-nctext').text.strip()
+                    body = bs.find('div', class_='sonin-nctext').text.strip().replace('\n', ' ')
                     news_created = bs.find('span', class_='dateago red').text
                     news_created = self.callback(news_created)
 

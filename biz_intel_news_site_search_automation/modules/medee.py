@@ -45,7 +45,7 @@ class medee:
                 title = (bs.find('h1', attrs={'class':'single-font'})).text.strip()
                 image_div = bs.find('div', attrs={'id':'single-cover'})
                 img ='https://medee.mn'+ (image_div.find('img')).get('src')
-                body = (bs.find('div', attrs={'class':'wordwrap'})).text.strip()
+                body = (bs.find('div', attrs={'class':'wordwrap'})).text.strip().replace('\n', ' ')
                 article  = bs.find('article', class_="panel")
                 news_created = article.find('time').text.strip()
                 news_created = self.callback(news_created)

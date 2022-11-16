@@ -48,7 +48,7 @@ class isee:
                 title = (bs.find('h1', class_='title')).text.strip()
                 image_div = bs.find('figure', class_='image')
                 img = (image_div.find('img')).get('src')
-                body = (bs.find('div', class_='content-div')).text.strip()
+                body = (bs.find('div', class_='content-div')).text.strip().replace('\n', ' ')
                 news_created = bs.find('span', class_='meta-date').text.strip()
                 news_created = self.callback(news_created)
 

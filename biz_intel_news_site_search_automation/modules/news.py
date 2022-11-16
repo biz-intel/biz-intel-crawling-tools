@@ -62,7 +62,7 @@ class news:
                 try:
                     title = (bs.find_all('h1', class_="entry-title"))[0].get_text().strip()
                     img = (bs.find('img', class_='attachment-newsmn_top_big_one size-newsmn_top_big_one wp-post-image')).get('src')
-                    body = (bs.find('div', class_='has-content-area')).text.strip()
+                    body = (bs.find('div', class_='has-content-area')).text.strip().replace('\n', ' ')
                     news_created = bs.find('span', class_='entry-date').text.strip()
                     news_created = self.callback(news_created)
 

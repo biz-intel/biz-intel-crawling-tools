@@ -45,7 +45,7 @@ class updown:
                 title = (bs.find('span', class_='headline')).text.strip()
                 image_div = bs.find('div', class_='btRegularMediaPosition')
                 img =( image_div.find('img')).get('src')
-                body = (bs.find('div', class_='bt_bb_wrapper')).text.strip()
+                body = (bs.find('div', class_='bt_bb_wrapper')).text.strip().replace('\n', ' ')
                 news_created = bs.find('span', class_='btArticleDate').text.strip()
                 news_created = self.callback(news_created)
 

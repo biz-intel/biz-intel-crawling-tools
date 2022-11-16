@@ -53,7 +53,7 @@ class gogo:
                 image_a = bs.find('a', class_='gogo-zoom')
                 a = self.bs4(str(image_a), "html.parser")
                 img = (a.find('img')).get('src')
-                body = (bs.find('div', class_='news-cont-container')).text.strip()
+                body = (bs.find('div', class_='news-cont-container')).text.strip().replace('\n', ' ')
                 date_div = bs.find('div', class_='content-detail-author-container')
                 news_created = date_div.find('span').text.strip()
                 news_created = self.callback(news_created)

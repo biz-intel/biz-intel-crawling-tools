@@ -61,6 +61,7 @@ class ikon:
                     p_tags = body_div.find_all('p')
                     for p in p_tags:
                         body+=p.text.strip()
+                    body = body.replace('\n', ' ')
                     news_created = bs.find('div', class_='time').text.strip().replace(' ', '').replace('оны', '-').replace('сарын', '-')
                     news_created = self.callback(news_created)
 
