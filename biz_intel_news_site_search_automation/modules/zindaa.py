@@ -46,7 +46,7 @@ class zindaa:
                 parent_div = bs.find('div', class_='news-more-area')
                 title = (parent_div.find('h1')).text.strip()
                 img = (parent_div.find('img')).get('src')
-                body = (parent_div.find('div', class_='desc')).text.strip()
+                body = (parent_div.find('div', class_='desc')).text.strip().replace('\n', ' ')
                 date_parent_div = parent_div.find('div', class_='pull-left')
                 news_created = date_parent_div.find_all('span')[1].text.strip()
                 news_created = self.callback(news_created)
