@@ -25,7 +25,7 @@ from datetime                                   import timedelta
 from bs4                                        import BeautifulSoup
 from selenium                                   import webdriver
 from selenium.webdriver.common.by               import By
-from assets.database                            import database
+from ..assets.database                            import database
 from selenium.webdriver.common.action_chains    import ActionChains
 from mysql.connector.errors                     import IntegrityError
 from selenium.common.exceptions                 import WebDriverException
@@ -64,7 +64,7 @@ class news_configs(main_configures):
         super().__init__()
 
     def start(self, key_word):
-        driver = webdriver.Chrome(options = super().options)
+        driver = webdriver.Chrome(options = self.options)
         action = ActionChains(driver)
         
         print("*************************************************")
@@ -186,6 +186,6 @@ class news_configs(main_configures):
         driver.close()
 
     def run(self):
-        for key_word in super().key_words:
+        for key_word in self.key_words:
             thread = threading.Thread(target=self.start, args=[key_word])
             thread.start()

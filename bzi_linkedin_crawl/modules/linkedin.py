@@ -1,5 +1,5 @@
 class linkedin:
-    def __init__(self, query, action, connection, driver, By, bs4, randint, requests, time, exception, callback):
+    def __init__(self, query, action, connection, driver, By, bs4, randint, requests, time, exception, callback, email, password):
         self.query = query
         self.connection = connection
         self.links = []
@@ -13,6 +13,8 @@ class linkedin:
         self.time = time
         self.exception = exception
         self.callback = callback
+        self.email = email
+        self.password = password
         
     def start_download(self):
         def wait(duration = 30):

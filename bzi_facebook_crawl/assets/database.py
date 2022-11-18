@@ -16,25 +16,25 @@ class database(database_configures):
         try:
             sql = 'insert into '+self.table_name+'(title, img, body, site, link, key_word, news_created_date)values(%s,%s,%s,%s,%s, %s, %s)'
             val = [title, img, body, site, link, key_word, news_created]
-            super().commit(sql = sql, val = val)
+            self.commit(sql = sql, val = val)
             self.inserted += 1
-        except super().error:
+        except self.error:
             pass
 
     def insert_error_logs(self, site:str, key_word:str, error:str):
         try:
             sql = 'insert into error_logs(site, key_word, error)values(%s, %s, %s)'
             val = [site, key_word, error]
-            super().commit(sql = sql, val = val)
-        except super().error:
+            self.commit(sql = sql, val = val)
+        except self.error:
             pass
 
     def insert_count_logs(self, site:str, key_word:str):
         try:
             sql = 'insert into count_logs(site, key_word, inserted)values(%s, %s, %s)'
             val = [site, key_word, str(self.inserted)]
-            super().commit(sql = sql, val = val)
-        except super().error:
+            self.commit(sql = sql, val = val)
+        except self.error:
             pass
 
     def update_data(self, link:str, **kwargs):
@@ -42,4 +42,4 @@ class database(database_configures):
             if column_name in self.key_types:
                 sql = 'update ' +self.table_name +' set '+column_name+' = %s where link = %s'
                 val = [kwargs[column_name], link]
-                super().commit(sql = sql, val = val)
+                self.commit(sql = sql, val = val)

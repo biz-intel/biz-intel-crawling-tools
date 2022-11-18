@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 import snscrape.modules.twitter as sntwitter
 
-from assets.database          import database
+from ..assets.database            import database
 from datetime                   import datetime
 from modules.twitter            import twitter
 
@@ -23,7 +23,7 @@ class twitter_configs(main_configures):
         print('->   Жиргээнүүдийг татаж эхэлж байна')
         print('->   Эхэлсэн цаг:', get_time())
 
-        for key_word in super().key_words:
+        for key_word in self.key_words:
             print('->       Түлхүүр үг:', key_word)
             twitter(sntwitter=sntwitter, connection=connection, key_word=key_word).start_download('replies','retweets', date='2022-01-01')
 
