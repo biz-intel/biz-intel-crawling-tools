@@ -20,6 +20,32 @@ from ..assets.database                          import database
 from selenium.webdriver.common.action_chains    import ActionChains
 from selenium.common.exceptions                 import StaleElementReferenceException
 
+def format_date(news_created)->str:
+    news_created = news_created.lower()
+    if news_created[1] ==' ':
+        news_created = '0' + news_created
+    if 'өчигдөр' in news_created:
+        news_created = datetime.now()-timedelta(days=1)
+    elif 'минутын' in news_created:
+        news_created = datetime.now()-timedelta(minutes=int(news_created[:2:]))
+    elif 'цагийн' in news_created:
+        news_created = datetime.now()-timedelta(hours=int(news_created[:2:]))
+    elif 'өдрийн' in news_created:
+        news_created = datetime.now()-timedelta(days=int(news_created[:2:]))
+    try:
+        news_created = datetime.strftime(news_created, '%Y-%m-%d')
+    except ValueError:
+        news_created = datetime.strftime(news_created, '%Y.%m.%d')
+    except TypeError:
+        try:
+            news_created = datetime.strftime(datetime.strptime(news_created, '%Y-%m-%d %H:%M'), '%Y-%m-%d')
+        except ValueError:
+            try:
+                news_created = datetime.strftime(datetime.strptime(news_created, '%Y-%m-%d'), '%Y-%m-%d')
+            except ValueError:
+                news_created = datetime.strftime(datetime.strptime(news_created, '%Y.%m.%d'), '%Y.%m.%d')
+    return news_created
+
 def get_time()->str:
     return datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
 
@@ -48,15 +74,15 @@ class facebook_configs(main_configures):
                             requests = requests,
                             time = time,
                             exception = StaleElementReferenceException, 
-                            callback = None,
+                            callback = format_date,
                             action = action,
                             email=self.email,
                             password=self.pass_word,
                         )
             scraper.start_download()
-            # time.sleep(randint(1, 4))
-            # print("->   Дууссан цаг:", get_time())
-        # driver.close()
+            time.sleep(randint(1, 4))
+            print("->   Дууссан цаг:", get_time())
+        driver.close()
 
     def run(self):
         self.start()
