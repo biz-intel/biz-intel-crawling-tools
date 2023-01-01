@@ -1,12 +1,12 @@
 import os
-os.environ['PATH'] = r"".join('assets/')
+# os.environ['PATH'] = r"".join('./assets/')
 
 from threading import Thread
-from bzi_facebook_crawl.assets.configures                       import facebook_configs
+# from bzi_facebook_crawl.assets.configures                       import facebook_configs
 # from bzi_instagram_crawl.assets.configures                      import instagram_configs
 # from bzi_linkedin_crawl.assets.configures                       import linkedin_configs
-from bzi_twitter_crawl.assets.configures                        import twitter_configs
-# from biz_intel_news_site_search_automation.assets.configures    import news_configs
+# from bzi_twitter_crawl.assets.configures                        import twitter_configs
+from biz_intel_news_site_search_automation.assets.configures    import news_configs
 
 class start_crawl:
 
@@ -15,11 +15,11 @@ class start_crawl:
 
     def __init__(self):
         self.configures = { 
-                            # 'news'      :   news_configs(),      
-                            'facebook'  :   facebook_configs(),
+                            'news'      :   news_configs(),      
+                            # 'facebook'  :   facebook_configs(),
                             # 'instagram' :   instagram_configs(),
                             # 'linkedin'  :   linkedin_configs(),
-                            'twitter'   :   twitter_configs(),
+                            # 'twitter'   :   twitter_configs(),
                         }
 
     def start(self):

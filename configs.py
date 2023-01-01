@@ -13,7 +13,10 @@ class main_configures:
         self.options.add_argument("start-maximized")
         self.options.add_experimental_option('excludeSwitches',['enable-logging'])
         self.options.add_experimental_option("prefs", {"profile.default_content_setting_values.notifications": 2})
-        self.key_words = os.getenv('key_words').split(sep=(','))
+        key_words = os.getenv('key_words').split(sep=(','))
+        self.key_words = []
+        for key in key_words:
+            self.key_words.append(key.strip())
         self.email = ''
         self.pass_word = ''
     def configure_email(self, type:str):

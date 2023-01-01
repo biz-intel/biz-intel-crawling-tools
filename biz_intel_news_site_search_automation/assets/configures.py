@@ -164,17 +164,17 @@ class news_configs(main_configures):
                             callback = format_date
                         ),
                 zindaa  ( 
-                        query = key_word,
-                        connection = db_connection,
-                        driver = driver,
-                        By = By,
-                        bs4 = BeautifulSoup,
-                        randint = random.randint,
-                        requests = requests,
-                        time = time,
-                        exception = WebDriverException, 
-                        action = None,
-                        callback = format_date
+                            query = key_word,
+                            connection = db_connection,
+                            driver = driver,
+                            By = By,
+                            bs4 = BeautifulSoup,
+                            randint = random.randint,
+                            requests = requests,
+                            time = time,
+                            exception = WebDriverException,
+                            action = None,
+                            callback = format_date
                     ),
                 ]
         
@@ -187,5 +187,4 @@ class news_configs(main_configures):
 
     def run(self):
         for key_word in self.key_words:
-            thread = threading.Thread(target=self.start, args=[key_word])
-            thread.start()
+            self.start(key_word)
