@@ -64,7 +64,6 @@ class gogo:
                 data['Холбоос'] = link
                 data['Нийтлэгдсэн огноо'] = news_created
                 self.connection.build_data(data)
-                self.connection.print_data()
             except AttributeError as err:
                 continue
             except IndexError as err:

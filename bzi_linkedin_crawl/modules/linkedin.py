@@ -90,7 +90,6 @@ class linkedin:
                         data["Сэтгэгдэлийн тоо"] = lis[1].text.replace(" comment", "")
                         data["Хуваалцсан тоо"] = lis[2].text.replace(" reposts", "")
                         self.connection.build_data(data)
-                        self.connection.print_data()
                     except:
                         print("Мэдээлэл олдсонгүй...!", element)
                     self.driver.execute_script("arguments[0].remove();", element)

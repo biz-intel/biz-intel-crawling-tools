@@ -90,7 +90,6 @@ class reddit:
                         data["count_comment"] = lis[1].text.replace(" comment", "")
                         data["count_repost"] = lis[2].text.replace(" reposts", "")
                         self.connection.build_data(data)
-                        self.connection.print_data()
                     except:
                         print("Couldn't find image or username, wrong div...!", element)
                     self.driver.execute_script("arguments[0].remove();", element)
