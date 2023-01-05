@@ -1,4 +1,4 @@
-class linkedin:
+class reddit:
     def __init__(self, query, connection, driver, By, time, callback, email, pass_word, Key, randint):
         self.query = query
         self.connection = connection
@@ -16,7 +16,7 @@ class linkedin:
     def start_download(self):
         def wait(duration = 30):
             self.driver.implicitly_wait(duration)
-        self.driver.get('https://linkedin.com')
+        self.driver.get('https://reddit.com')
 
         wait()
         form = self.driver.find_element(by=self.select_by.CSS_SELECTOR, value="form.sign-in-form")     

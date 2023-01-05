@@ -51,11 +51,17 @@ class isee:
                 body = (bs.find('div', class_='content-div')).text.strip().replace('\n', ' ')
                 news_created = bs.find('span', class_='meta-date').text.strip()
                 news_created = self.callback(news_created)
-
-                self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query, news_created=news_created)
+                data = {}
+                data['title'] = title, 
+                data['img'] = img
+                data['body'] = body
+                data['site'] = self.site
+                data['link'] = link
+                data['news_created'] = news_created
+                self.connection.build_data(data)
+                self.connection.print_data()
             except AttributeError as err:
-                self.connection.insert_error_logs(site = self.site, key_word = self.query, error = str(err))
                 continue
             self.time.sleep(self.random(1, 3))
-        self.connection.insert_count_logs(site=self.site, key_word=self.query)
+        self.connection.insert_data(collection_name = self.query, key_word = "isee")
         print("->       Ажмилттай дууслаа!      .......", self.connection.get_inserted(), "тооны мэдээ цуглалаа...!")

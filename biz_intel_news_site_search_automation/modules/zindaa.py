@@ -22,12 +22,18 @@ class zindaa:
         wait()
         print("->       Сайт:", self.site)
         print("->       Холбоосуудын авч байна................")
-        while self.page < 41:
+        while True:
             try:
                 self.driver.get('https://news.zindaa.mn/news/search?q='+self.query+'&q='+self.query+'&offset='+str(self.page))
                 wait()
                 self.page+=1
                 div = self.driver.find_element(self.select_by.CLASS_NAME, 'news-list-groups')
+                try:
+                    not_found = div.find_element(self.select_by.TAG_NAME, 'strong')
+                    if not_found.text.strip() == 'Анхаар!':
+                        break
+                except:
+                    pass
                 a_tags = div.find_elements(self.select_by.TAG_NAME, 'a')
                 for a_tag in a_tags:
                     href = a_tag.get_attribute('href')
@@ -51,10 +57,17 @@ class zindaa:
                 news_created = date_parent_div.find_all('span')[1].text.strip()
                 news_created = self.callback(news_created)
 
-                self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query, news_created=news_created)
+                data = {}
+                data['title'] = title, 
+                data['img'] = img
+                data['body'] = body
+                data['site'] = self.site
+                data['link'] = link
+                data['news_created'] = news_created
+                self.connection.build_data(data)
+                self.connection.print_data()
                 self.time.sleep(self.random(1, 3))
             except AttributeError as err:
-                self.connection.insert_error_logs(site = self.site, key_word = self.query, error = str(err))
                 continue
-        self.connection.insert_count_logs(site=self.site, key_word=self.query)
+        self.connection.insert_data(collection_name = self.query, key_word = "zindaa")
         print("->       Ажмилттай дууслаа!      .......", self.connection.get_inserted(), "тооны мэдээ цуглалаа...!")

@@ -5,8 +5,9 @@ import random
 import datetime
 import requests
 import threading
-import mysql.connector as connector
 
+from configs import main_configures
+from configs import database_configures
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
@@ -19,35 +20,18 @@ from modules.sonin                              import sonin
 from modules.updown                             import updown
 from modules.zindaa                             import zindaa
 
-from dotenv                                     import load_dotenv
 from random                                     import randint
 from datetime                                   import datetime
 from datetime                                   import timedelta
 from bs4                                        import BeautifulSoup
 from selenium                                   import webdriver
 from selenium.webdriver.common.by               import By
-from assets.database                            import database
 from selenium.webdriver.common.action_chains    import ActionChains
 from mysql.connector.errors                     import IntegrityError
 from selenium.common.exceptions                 import WebDriverException
 from selenium.common.exceptions                 import StaleElementReferenceException
 
-os.environ['PATH'] = r"".join('./assets/')
-
-
-load_dotenv()
-
-db_connection = database(
-                    host_name       =   os.getenv('database_host'),
-                    user_name       =   os.getenv('database_username'),
-                    user_password   =   os.getenv('database_password'),
-                    database_name   =   os.getenv('database_name'),
-                    table_name      =   'biz_intel_fourth_valution',
-                    mysql_connector = connector,
-                    integrity_error = IntegrityError
-                    )
-
-key_words = os.getenv('key_words').split(sep=(','))
+db_connection = database_configures()
 
 def format_date(news_created)->str:
     news_created = news_created.lower()
@@ -61,6 +45,9 @@ def format_date(news_created)->str:
         news_created = datetime.now()-timedelta(hours=int(news_created[:2:]))
     elif 'өдрийн' in news_created:
         news_created = datetime.now()-timedelta(days=int(news_created[:2:]))
+    elif 'оны' in news_created:
+        news_created = news_created.replace('оны', '-').replace('сарын', '-').replace(' ', '')
+        return news_created
     try:
         news_created = datetime.strftime(news_created, '%Y-%m-%d')
     except ValueError:
@@ -75,134 +62,134 @@ def format_date(news_created)->str:
                 news_created = datetime.strftime(datetime.strptime(news_created, '%Y.%m.%d'), '%Y.%m.%d')
     return news_created
 
-def start(key_word):
+class news_configs(main_configures):
+    def __init__(self) -> None:
+        super().__init__()
 
-    options = webdriver.ChromeOptions()
-    options.add_experimental_option('excludeSwitches',['enable-logging'])
-    driver = webdriver.Chrome(options = options)
-    action = ActionChains(driver)
-    
-    print("*************************************************")
-    print("->   Түлхүүр үг:", key_word)
-    print("->   Эхэлсэн цаг:", datetime.now())
+    def start(self, key_word):
+        driver = webdriver.Chrome(options = self.options)
+        action = ActionChains(driver)
+        
+        print("*************************************************")
+        print("->   Түлхүүр үг:", key_word)
+        print("->   Эхэлсэн цаг:", datetime.now())
 
-    scrapers =  [
-            gogo    ( 
-                        query = key_word,
-                        connection = db_connection,
-                        driver = driver,
-                        By = By,
-                        bs4 = BeautifulSoup,
-                        randint = random.randint,
-                        requests = requests,
-                        time = time,
-                        exception = None, 
-                        action = action,
-                        callback = format_date
+        scrapers =  [
+                gogo    ( 
+                            query = key_word,
+                            connection = db_connection,
+                            driver = driver,
+                            By = By,
+                            bs4 = BeautifulSoup,
+                            randint = random.randint,
+                            requests = requests,
+                            time = time,
+                            exception = None, 
+                            action = action,
+                            callback = format_date
+                        ),
+                ikon    ( 
+                            query = key_word,
+                            connection = db_connection,
+                            driver = driver,
+                            By = By,
+                            bs4 = BeautifulSoup,
+                            randint = random.randint,
+                            requests = requests,
+                            time = time,
+                            exception = StaleElementReferenceException,
+                            action = None,
+                            callback = format_date
+                        ),
+                isee    ( 
+                            query = key_word,
+                            connection = db_connection,
+                            driver = driver,
+                            By = By,
+                            bs4 = BeautifulSoup,
+                            randint = random.randint,
+                            requests = requests,
+                            time = time,
+                            exception = WebDriverException,  
+                            action = action,
+                            callback = format_date
+                        ),
+                medee   ( 
+                            query = key_word,
+                            connection = db_connection,
+                            driver = driver,
+                            By = By,
+                            bs4 = BeautifulSoup,
+                            randint = random.randint,
+                            requests = requests,
+                            time = time,
+                            exception = WebDriverException, 
+                            action = action,
+                            callback = format_date
+                        ),
+                news    ( 
+                            query = key_word,
+                            connection = db_connection,
+                            driver = driver,
+                            By = By,
+                            bs4 = BeautifulSoup,
+                            randint = random.randint,
+                            requests = requests,
+                            time = time,
+                            exception = StaleElementReferenceException,
+                            action = None,
+                            callback = format_date
+                        ),
+                sonin   ( 
+                            query = key_word,
+                            connection = db_connection,
+                            driver = driver,
+                            By = By,
+                            bs4 = BeautifulSoup,
+                            randint = random.randint,
+                            requests = requests,
+                            time = time,
+                            exception = StaleElementReferenceException,
+                            action = None,
+                            callback = format_date
+                        ),
+                updown  ( 
+                            query = key_word,
+                            connection = db_connection,
+                            driver = driver,
+                            By = By,
+                            bs4 = BeautifulSoup,
+                            randint = random.randint,
+                            requests = requests,
+                            time = time,
+                            exception = WebDriverException, 
+                            action = action,
+                            callback = format_date
+                        ),
+                zindaa  ( 
+                            query = key_word,
+                            connection = db_connection,
+                            driver = driver,
+                            By = By,
+                            bs4 = BeautifulSoup,
+                            randint = random.randint,
+                            requests = requests,
+                            time = time,
+                            exception = WebDriverException,
+                            action = None,
+                            callback = format_date
                     ),
-            ikon    ( 
-                        query = key_word,
-                        connection = db_connection,
-                        driver = driver,
-                        By = By,
-                        bs4 = BeautifulSoup,
-                        randint = random.randint,
-                        requests = requests,
-                        time = time,
-                        exception = StaleElementReferenceException,
-                        action = None,
-                        callback = format_date
-                    ),
-            isee    ( 
-                        query = key_word,
-                        connection = db_connection,
-                        driver = driver,
-                        By = By,
-                        bs4 = BeautifulSoup,
-                        randint = random.randint,
-                        requests = requests,
-                        time = time,
-                        exception = WebDriverException,  
-                        action = action,
-                        callback = format_date
-                    ),
-            medee   ( 
-                        query = key_word,
-                        connection = db_connection,
-                        driver = driver,
-                        By = By,
-                        bs4 = BeautifulSoup,
-                        randint = random.randint,
-                        requests = requests,
-                        time = time,
-                        exception = WebDriverException, 
-                        action = action,
-                        callback = format_date
-                    ),
-            news    ( 
-                        query = key_word,
-                        connection = db_connection,
-                        driver = driver,
-                        By = By,
-                        bs4 = BeautifulSoup,
-                        randint = random.randint,
-                        requests = requests,
-                        time = time,
-                        exception = StaleElementReferenceException,
-                        action = None,
-                        callback = format_date
-                    ),
-            sonin   ( 
-                        query = key_word,
-                        connection = db_connection,
-                        driver = driver,
-                        By = By,
-                        bs4 = BeautifulSoup,
-                        randint = random.randint,
-                        requests = requests,
-                        time = time,
-                        exception = StaleElementReferenceException,
-                        action = None,
-                        callback = format_date
-                    ),
-            updown  ( 
-                        query = key_word,
-                        connection = db_connection,
-                        driver = driver,
-                        By = By,
-                        bs4 = BeautifulSoup,
-                        randint = random.randint,
-                        requests = requests,
-                        time = time,
-                        exception = WebDriverException, 
-                        action = action,
-                        callback = format_date
-                    ),
-            zindaa  ( 
-                    query = key_word,
-                    connection = db_connection,
-                    driver = driver,
-                    By = By,
-                    bs4 = BeautifulSoup,
-                    randint = random.randint,
-                    requests = requests,
-                    time = time,
-                    exception = WebDriverException, 
-                    action = None,
-                    callback = format_date
-                ),
-            ]
-    
-    for scraper in scrapers:
-        scraper.start_download()
-        time.sleep(randint(1, 4))
-    
-    print("->   Дууссан цаг:", datetime.now())
-    driver.close()
-
-class news_configs:
+                ]
+        
+        for scraper in scrapers:
+            scraper.start_download()
+            time.sleep(randint(1, 4))
+        
+        print("->   Дууссан цаг:", datetime.now())
+        driver.close()
+        driver.quit()
 
     def run(self):
-        for key_word in key_words:
-            thread = threading.Thread(target=start, args=[key_word])
-            thread.start()
+        for key_word in self.key_words:
+            self.start(key_word)
+            break

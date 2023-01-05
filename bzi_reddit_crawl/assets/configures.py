@@ -8,7 +8,7 @@ from configs import database_configures
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-from modules.linkedin                           import linkedin
+from modules.reddit                             import reddit
 
 from dotenv                                     import load_dotenv
 from random                                     import randint
@@ -46,7 +46,7 @@ def format_date(post_created_date:str)->str:
     
 
 
-class linkedin_configs(main_configures):
+class reddit_configs(main_configures):
     def __init__(self) -> None:
         super().__init__()
         self.configure_email('linkedin')
@@ -58,7 +58,7 @@ class linkedin_configs(main_configures):
             print("*************************************************")
             print("->   Түлхүүр үг:", key_word)
             print("->   Эхэлсэн цаг:", get_time())
-            scraper =  linkedin    ( 
+            scraper =  reddit    ( 
                             query = key_word,
                             connection = db_connection,
                             driver = driver,
