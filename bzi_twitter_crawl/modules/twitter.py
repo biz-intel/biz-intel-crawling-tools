@@ -16,10 +16,10 @@ class twitter:
                 query = query + ' -filter:'+f
         for tweet in self.sntwitter.TwitterSearchScraper(query).get_items():
             data = {}
-            data['link'] = vars(tweet)['url'],
-            data['user_id'] = vars(tweet)['user'].id,
-            data['tweet'] = vars(tweet)['content'],
-            data['created_date'] = str(vars(tweet)['date'])
+            data['Холбоос'] = vars(tweet)['url'],
+            data['Хэрэглэгчийн бүртгэлийн дугаар'] = vars(tweet)['user'].id,
+            data['Жиргээ'] = vars(tweet)['content'],
+            data['Нийтлэгдсэн огноо'] = str(vars(tweet)['date'])
             self.connection.build_data(data)
             self.connection.print_data()
         if self.connection.get_inserted() == 0:

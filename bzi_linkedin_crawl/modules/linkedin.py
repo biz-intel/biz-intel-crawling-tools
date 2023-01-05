@@ -70,29 +70,29 @@ class linkedin:
                         """user data"""
                         user_image_div = element.find_element(self.select_by.CLASS_NAME, "update-components-actor__image")
                         
-                        data["user_image"] = user_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
-                        data["user_name"] = element.find_element(self.select_by.XPATH, "//span[@dir='ltr']").text.strip()
+                        data["Хэрэглэгчийн зураг"] = user_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
+                        data["Хэрэглэгчийн нэр"] = element.find_element(self.select_by.XPATH, "//span[@dir='ltr']").text.strip()
                         """ post data """
-                        data["post_created_date"] = self.callback(element.find_element(self.select_by.CSS_SELECTOR, "span.update-components-actor__sub-description")\
+                        data["Огноо"] = self.callback(element.find_element(self.select_by.CSS_SELECTOR, "span.update-components-actor__sub-description")\
                                                                         .find_element(self.select_by.TAG_NAME, "span").text.replace("•", "").replace("\n", "").strip())
-                        data["post"] = element.find_element(self.select_by.CSS_SELECTOR, "span.break-words").text.replace("\n", " ").replace(" ( )", "")\
+                        data["Агуулга"] = element.find_element(self.select_by.CSS_SELECTOR, "span.break-words").text.replace("\n", " ").replace(" ( )", "")\
                                                                                                                   .replace("  ", " ").replace(" .", ".").strip()
                         try:
                             content_image_div = element.find_element(self.select_by.CLASS_NAME, "update-components-image")
-                            data["post_image"] = content_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
+                            data["Зураг"] = content_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
                         except:
-                            data["post_image"] = None
+                            data["Зураг"] = None
                         
                         """Social metrics"""
                         social_div = element.find_element(self.select_by.CSS_SELECTOR, "div.social-details-social-activity")
                         lis = social_div.find_elements(self.select_by.TAG_NAME, "li")
-                        data["count_like"] = lis[0].text
-                        data["count_comment"] = lis[1].text.replace(" comment", "")
-                        data["count_repost"] = lis[2].text.replace(" reposts", "")
+                        data["Хариу үйлдлийн тоо"] = lis[0].text
+                        data["Сэтгэгдэлийн тоо"] = lis[1].text.replace(" comment", "")
+                        data["Хуваалцсан тоо"] = lis[2].text.replace(" reposts", "")
                         self.connection.build_data(data)
                         self.connection.print_data()
                     except:
-                        print("Couldn't find image or username, wrong div...!", element)
+                        print("Мэдээлэл олдсонгүй...!", element)
                     self.driver.execute_script("arguments[0].remove();", element)
                 except:
                     break
