@@ -64,7 +64,6 @@ class sonin:
                     data['Холбоос'] = link
                     data['Нийтлэгдсэн огноо'] = news_created
                     self.connection.build_data(data)
-                    self.connection.print_data()
                     break
                     self.time.sleep(self.random(1, 3))
                 except AttributeError as err:

@@ -21,8 +21,8 @@ class twitter:
             data['Жиргээ'] = vars(tweet)['content'],
             data['Нийтлэгдсэн огноо'] = str(vars(tweet)['date'])
             self.connection.build_data(data)
-            self.connection.print_data()
         if self.connection.get_inserted() == 0:
             print('->           Жиргээ олдсонгүй...!')
-        self.connection.insert_data(collection_name = self.query, key_word = "tweeter")
-        # print('->           Татагдсан жиргээний тоо:', self.connection.get_counts()['inserted'])
+        else:
+            self.connection.insert_data(collection_name = self.query, key_word = "twitter")
+            print('->           Татагдсан жиргээний тоо:', self.connection.get_inserted())
