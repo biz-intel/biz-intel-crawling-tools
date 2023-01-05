@@ -58,12 +58,11 @@ class zindaa:
                 news_created = self.callback(news_created)
 
                 data = {}
-                data['title'] = title, 
-                data['img'] = img
-                data['body'] = body
-                data['site'] = self.site
-                data['link'] = link
-                data['news_created'] = news_created
+                data['Гарчиг'] = title, 
+                data['Зураг'] = img
+                data['Мэдээ'] = body
+                data['Холбоос'] = link
+                data['Нийтлэгдсэн огноо'] = news_created
                 self.connection.build_data(data)
                 self.connection.print_data()
                 self.time.sleep(self.random(1, 3))
