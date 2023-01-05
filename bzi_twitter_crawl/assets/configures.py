@@ -1,25 +1,26 @@
 import os
 import sys
 from configs import main_configures
+from configs import database_configures
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 import snscrape.modules.twitter as sntwitter
-
-from ..assets.database            import database
 from datetime                   import datetime
 from modules.twitter            import twitter
 
 def get_time()->str:
     return datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
 
-connection = database(table_name='tweets_2022_valute')
+connection = database_configures()
 
 class twitter_configs(main_configures):
     def __init__(self) -> None:
         super().__init__()
 
-    def start(self):
+    def start(self):        
+        print("*************************************************")
         print('->   Жиргээнүүдийг татаж эхэлж байна')
         print('->   Эхэлсэн цаг:', get_time())
 

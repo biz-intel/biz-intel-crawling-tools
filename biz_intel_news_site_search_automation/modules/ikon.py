@@ -32,6 +32,7 @@ class ikon:
         wait()
         print("->       Сайт:", self.site)
         print("->       Холбоосуудын авч байна................")
+        self.get_links()
         for i in range(1, 11):
             try:
                 paginator = self.driver.find_elements(self.select_by.CLASS_NAME, 'gsc-cursor-page')
@@ -40,9 +41,9 @@ class ikon:
                 paginator[i].click()
                 self.time.sleep(self.random(5, 15))
             except self.exception as err:
-                self.connection.insert_error_logs(site = self.site, key_word = self.query, error = str(err))
+                pass
             except IndexError as err:
-                self.connection.insert_error_logs(site = self.site, key_word = self.query, error = str(err))
+                pass
 
         
         print("->       Амжилттай авлаа.......................")
@@ -51,7 +52,7 @@ class ikon:
         for links in self.all_links:
             for link in links:
                 try:
-                    req = self.requests.get('https://ikon.mn/n/2gsk')
+                    req = self.requests.get(link)
                     bs = self.bs4(req.text, "html.parser") 
                     news_div = bs.find('div', class_='inews')
                     title = (news_div.find('h1')).text.strip()
@@ -64,13 +65,18 @@ class ikon:
                     body = body.replace('\n', ' ')
                     news_created = bs.find('div', class_='time').text.strip().replace(' ', '').replace('оны', '-').replace('сарын', '-')
                     news_created = self.callback(news_created)
-
-                    self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query, news_created=news_created)
+                    data = {}
+                    data['title'] = title, 
+                    data['img'] = img
+                    data['body'] = body
+                    data['site'] = self.site
+                    data['link'] = link
+                    data['news_created'] = news_created
+                    self.connection.build_data(data)
+                    self.connection.print_data()
                     self.time.sleep(self.random(1,3))
                     
                 except AttributeError as err:
-                    self.connection.insert_error_logs(site = self.site, key_word = self.query, error = str(err))
                     continue
-            break
-        self.connection.insert_count_logs(site=self.site, key_word=self.query)
+        self.connection.insert_data(collection_name = self.query, key_word = "ikon")
         print("->       Ажмилттай дууслаа!      .......", self.connection.get_inserted(), "тооны мэдээ цуглалаа...!")

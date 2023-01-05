@@ -36,7 +36,7 @@ class news:
             self.cancel = self.driver.find_element(self.select_by.ID, 'onesignal-slidedown-cancel-button')
             self.cancel.click()
         except:
-            print('Элемент олдсонгүй...!')
+            pass
         wait(duration=20)
         self.get_links()
         self.time.sleep(5)
@@ -66,11 +66,17 @@ class news:
                     news_created = bs.find('span', class_='entry-date').text.strip()
                     news_created = self.callback(news_created)
 
-                    self.connection.insert_data(title=title, img=img, body=body, site=self.site, link=link, key_word=self.query, news_created=news_created)
+                    data = {}
+                    data['title'] = title, 
+                    data['img'] = img
+                    data['body'] = body
+                    data['site'] = self.site
+                    data['link'] = link
+                    data['news_created'] = news_created
+                    self.connection.build_data(data)
+                    self.connection.print_data()
                     self.time.sleep(self.random(1, 3))
                 except AttributeError as err:
-                    self.connection.insert_error_logs(site = self.site, key_word = self.query, error = str(err))
                     continue
-            break
-        self.connection.insert_count_logs(site=self.site, key_word=self.query)
+        self.connection.insert_data(collection_name = self.query, key_word = "news")
         print("->       Ажмилттай дууслаа!      .......", self.connection.get_inserted(), "тооны мэдээ цуглалаа...!")

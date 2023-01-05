@@ -7,6 +7,7 @@ import requests
 import threading
 
 from configs import main_configures
+from configs import database_configures
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
@@ -25,13 +26,12 @@ from datetime                                   import timedelta
 from bs4                                        import BeautifulSoup
 from selenium                                   import webdriver
 from selenium.webdriver.common.by               import By
-from ..assets.database                            import database
 from selenium.webdriver.common.action_chains    import ActionChains
 from mysql.connector.errors                     import IntegrityError
 from selenium.common.exceptions                 import WebDriverException
 from selenium.common.exceptions                 import StaleElementReferenceException
 
-db_connection = database(table_name = 'biz_intel_fourth_valution')
+db_connection = database_configures()
 
 def format_date(news_created)->str:
     news_created = news_created.lower()
@@ -45,6 +45,9 @@ def format_date(news_created)->str:
         news_created = datetime.now()-timedelta(hours=int(news_created[:2:]))
     elif 'өдрийн' in news_created:
         news_created = datetime.now()-timedelta(days=int(news_created[:2:]))
+    elif 'оны' in news_created:
+        news_created = news_created.replace('оны', '-').replace('сарын', '-').replace(' ', '')
+        return news_created
     try:
         news_created = datetime.strftime(news_created, '%Y-%m-%d')
     except ValueError:
@@ -184,7 +187,9 @@ class news_configs(main_configures):
         
         print("->   Дууссан цаг:", datetime.now())
         driver.close()
+        driver.quit()
 
     def run(self):
         for key_word in self.key_words:
             self.start(key_word)
+            break

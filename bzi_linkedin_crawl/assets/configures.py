@@ -1,10 +1,9 @@
 import os
 import sys
 import time
-import random
 import datetime
-import requests
 from configs import main_configures
+from configs import database_configures
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
@@ -15,13 +14,9 @@ from dotenv                                     import load_dotenv
 from random                                     import randint
 from datetime                                   import datetime
 from datetime                                   import timedelta
-from bs4                                        import BeautifulSoup
 from selenium                                   import webdriver
 from selenium.webdriver.common.by               import By
-from ..assets.database                            import database
-from selenium.webdriver.common.action_chains    import ActionChains
-from selenium.common.exceptions                 import WebDriverException
-from selenium.common.exceptions                 import StaleElementReferenceException
+from selenium.webdriver.common.keys             import Keys
 
 def get_time()->str:
     return datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
@@ -29,7 +24,27 @@ def get_time()->str:
 
 load_dotenv()
 
-db_connection = database('biz_intel_fourth_valution')
+db_connection = database_configures()
+
+def format_date(post_created_date:str)->str:
+    def replace(created_date, char)->int:
+        return int(created_date.replace(char, ""))
+    if "m" in post_created_date:
+        days = replace(post_created_date, "m") // 60//24
+    elif "h" in post_created_date:
+        days = replace(post_created_date, "h") // 60
+    elif "d" in post_created_date:
+        days = replace(post_created_date, "d") 
+    elif "w" in post_created_date:
+        days = replace(post_created_date, "w") * 7
+    elif "mo" in post_created_date:
+        days = replace(post_created_date, "mo") * 30
+    else:
+        days = replace(post_created_date, "yr") * 365
+    created_at = datetime.now()-timedelta(days=days)
+    return datetime.strftime(created_at, "%Y")
+    
+
 
 class linkedin_configs(main_configures):
     def __init__(self) -> None:
@@ -39,7 +54,6 @@ class linkedin_configs(main_configures):
 
     def start(self):
         driver = webdriver.Chrome(options = self.options)
-        action = ActionChains(driver)
         for key_word in self.key_words:
             print("*************************************************")
             print("->   Түлхүүр үг:", key_word)
@@ -48,18 +62,18 @@ class linkedin_configs(main_configures):
                             query = key_word,
                             connection = db_connection,
                             driver = driver,
-                            By = By,
-                            bs4 = BeautifulSoup,
-                            randint = random.randint,
-                            requests = requests,
+                            By=By,
                             time = time,
-                            exception = StaleElementReferenceException, 
-                            action = action,
-                            callback=None,
-                            email=self.email,
-                            password=self.pass_word,
-                        ),
+                            callback=format_date,
+                            Key=Keys,
+                            email=self.linkedin_email,
+                            pass_word=self.linkedin_password,
+                            randint=randint
+                        )
             scraper.start_download()
             time.sleep(randint(1, 4))
             print("->   Дууссан цаг:", get_time())
         driver.close()
+        driver.quit()
+    def run(self):
+        self.start()
