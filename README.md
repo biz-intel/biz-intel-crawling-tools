@@ -35,8 +35,8 @@
     python3 get-pip.py
 
 # Python хэлний сан суулгах
-    |assets folder дотроо дараах коммандыг өгнө|
-    |pip install -r requirements.txt|
+    | assets folder дотроо дараах коммандыг өгнө |
+    | pip install -r requirements.txt |
 
 # Chromedriver суулгах
     chromedriver суулгахдаа дараах зүйлсийг анхаарна
