@@ -44,3 +44,5 @@
         үйлдлийн системдээ тааруулж суулгах
         assets хавтас дотор суулгах
         https://chromedriver.chromium.org/downloads
+
+## start.py module дуудаж ажиллуулна
