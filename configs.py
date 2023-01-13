@@ -30,10 +30,12 @@ class database_configures:
     
     def __init__(self) -> None:
         load_dotenv()
-        # self.myclient = pymongo.MongoClient("mongodb+srv://"+os.getenv(key = 'mongodb_username')+":"+os.getenv(key='mongodb_password')+
-        #                                                     "@first-cluster.hmz4mpz.mongodb.net/?retryWrites=true&w=majority")
-        # self.mydatabase = self.myclient["crawl"]
+        self.myclient = pymongo.MongoClient("mongodb+srv://"+os.getenv(key = 'mongodb_username')+":"+os.getenv(key='mongodb_password')+
+                                                            "@first-cluster.hmz4mpz.mongodb.net/?retryWrites=true&w=majority")
+        self.mydatabase = self.myclient["crawl"]
         self.inserted = 0
+        self.tweet_inserted = 0
+        self.tweet_updated = 0
         self.datas = []
 
     def get_inserted(self):
@@ -41,6 +43,8 @@ class database_configures:
 
     def reset_count(self):
         self.inserted = 0
+        self.tweet_inserted = 0
+        self.tweet_updated = 0
 
     def build_data(self, data:dict):
         self.datas.append(data)
@@ -49,6 +53,6 @@ class database_configures:
     def print_data(self):
         print(self.datas)
 
-    def insert_data(self, collection:str, key_word:str):
-        mycollection = self.mydatabase[collection]
+    def insert_data(self, collection_name:str, key_word:str):
+        mycollection = self.mydatabase[collection_name]
         return mycollection.insert_one({key_word : self.datas})

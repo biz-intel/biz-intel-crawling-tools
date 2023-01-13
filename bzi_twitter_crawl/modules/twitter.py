@@ -5,21 +5,22 @@ class twitter:
         self.sntwitter = sntwitter
         self.connection = connection
         self.connection.reset_count()
-        self.key_word = key_word
+        self.query = key_word
 
     def start_download(self, *filters, date=None):
-        query = self.key_word
+        query = self.query
         if date != None:
             query =query+ ' since:' +date
         if len(filters) > 0:
             for f in filters:
                 query = query + ' -filter:'+f
         for tweet in self.sntwitter.TwitterSearchScraper(query).get_items():
-            data = {}
-            data['Холбоос'] = vars(tweet)['url'],
-            data['Хэрэглэгчийн бүртгэлийн дугаар'] = vars(tweet)['user'].id,
-            data['Жиргээ'] = vars(tweet)['content'],
-            data['Нийтлэгдсэн огноо'] = str(vars(tweet)['date'])
+            data = {
+                'Холбоос' : str(vars(tweet)['url']),
+                'Хэрэглэгчийн бүртгэлийн дугаар' : str(vars(tweet)['user'].id),
+                'Жиргээ' : str(vars(tweet)['content']),
+                'Нийтлэгдсэн огноо' : str(vars(tweet)['date'])
+                }
             self.connection.build_data(data)
         if self.connection.get_inserted() == 0:
             print('->           Жиргээ олдсонгүй...!')
