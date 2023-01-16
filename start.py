@@ -1,5 +1,6 @@
 import os
 import requests
+import time
 # os.environ['PATH'] = r"".join('./assets/')
 # from bzi_facebook_crawl.assets.configures                       import facebook_configss
 from bzi_linkedin_crawl.assets.configures                       import linkedin_configs
@@ -59,11 +60,10 @@ crawler = start_crawl()
 # crawler.start()
 
 while True:
-    data = requests.get("http://localhost:8002/status?status_type=crawl_status")
+    data = requests.get("https://api.biz-intel.tech/status?status_type=crawl_status")
     key_words = data.json()['key_words']
-    for key_word in key_words:
-        crawler.start(key_word=key_word)
-    break
-    # except:
-    #     print("Not pending keywords!")
-    #     break
+    try:
+        for key_word in key_words:
+            crawler.start(key_word=key_word)
+    except:
+        time.sleep(1800)
