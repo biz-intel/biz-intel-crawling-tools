@@ -19,16 +19,16 @@ class twitter_configs(main_configures):
     def __init__(self) -> None:
         super().__init__()
 
-    def start(self):        
+    def start(self, key_word):        
         print("*************************************************")
         print('->   Жиргээнүүдийг татаж эхэлж байна')
         print('->   Эхэлсэн цаг:', get_time())
-
-        for key_word in self.key_words:
-            print('->       Түлхүүр үг:', key_word)
-            twitter(sntwitter=sntwitter, connection=connection, key_word=key_word).start_download('replies','retweets', date='2023-01-01')
+        
+        print('->       Түлхүүр үг:', key_word)
+        twitter(sntwitter=sntwitter, connection=connection, key_word=key_word).start_download('replies','retweets', date='2023-01-01')
 
         print('->   Дууссан цаг:', get_time())
 
     def run(self):
-        self.start()
+        for key_word in self.key_words:
+            self.start(key_word=key_word)

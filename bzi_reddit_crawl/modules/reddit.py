@@ -96,5 +96,5 @@ class reddit:
                 except:
                     break
         
-        self.connection.insert_data(collection_name = self.query, key_word = "linkedin")
+        self.connection.insert_data(t= "linkedin")
         print("->       Ажмилттай дууслаа!      .......", self.connection.get_inserted(), "тооны мэдээ цуглалаа...!")

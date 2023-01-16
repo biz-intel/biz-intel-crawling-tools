@@ -52,28 +52,28 @@ class linkedin_configs(main_configures):
         self.configure_email('linkedin')
         self.configure_password('linkedin')
 
-    def start(self):
+    def start(self, key_word):
         driver = webdriver.Chrome(options = self.options)
-        for key_word in self.key_words:
-            print("*************************************************")
-            print("->   Түлхүүр үг:", key_word)
-            print("->   Эхэлсэн цаг:", get_time())
-            scraper =  linkedin    ( 
-                            query = key_word,
-                            connection = db_connection,
-                            driver = driver,
-                            By=By,
-                            time = time,
-                            callback=format_date,
-                            Key=Keys,
-                            email=self.linkedin_email,
-                            pass_word=self.linkedin_password,
-                            randint=randint
-                        )
-            scraper.start_download()
-            time.sleep(randint(1, 4))
-            print("->   Дууссан цаг:", get_time())
+        print("*************************************************")
+        print("->   Түлхүүр үг:", key_word)
+        print("->   Эхэлсэн цаг:", get_time())
+        scraper =  linkedin    ( 
+                        query = key_word,
+                        connection = db_connection,
+                        driver = driver,
+                        By=By,
+                        time = time,
+                        callback=format_date,
+                        Key=Keys,
+                        email=self.linkedin_email,
+                        pass_word=self.linkedin_password,
+                        randint=randint
+                    )
+        scraper.start_download()
+        time.sleep(randint(1, 4))
+        print("->   Дууссан цаг:", get_time())
         driver.close()
         driver.quit()
     def run(self):
-        self.start()
+        for key_word in self.key_words:
+            self.start(key_word=key_word)

@@ -68,33 +68,35 @@ class linkedin:
                     try:
                         data = {}
                         """user data"""
-                        user_image_div = element.find_element(self.select_by.CLASS_NAME, "update-components-actor__image")
+                        # user_image_div = element.find_element(self.select_by.CLASS_NAME, "update-components-actor__image")
                         
-                        data["Хэрэглэгчийн зураг"] = user_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
-                        data["Хэрэглэгчийн нэр"] = element.find_element(self.select_by.XPATH, "//span[@dir='ltr']").text.strip()
+                        # data["user_image"] = user_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
+                        data["user_name"] = element.find_element(self.select_by.XPATH, "//span[@dir='ltr']").text.strip()
                         """ post data """
-                        data["Огноо"] = self.callback(element.find_element(self.select_by.CSS_SELECTOR, "span.update-components-actor__sub-description")\
+                        data["created_date"] = self.callback(element.find_element(self.select_by.CSS_SELECTOR, "span.update-components-actor__sub-description")\
                                                                         .find_element(self.select_by.TAG_NAME, "span").text.replace("•", "").replace("\n", "").strip())
-                        data["Агуулга"] = element.find_element(self.select_by.CSS_SELECTOR, "span.break-words").text.replace("\n", " ").replace(" ( )", "")\
+                        data["body"] = element.find_element(self.select_by.CSS_SELECTOR, "span.break-words").text.replace("\n", " ").replace(" ( )", "")\
                                                                                                                   .replace("  ", " ").replace(" .", ".").strip()
                         try:
                             content_image_div = element.find_element(self.select_by.CLASS_NAME, "update-components-image")
-                            data["Зураг"] = content_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
+                            data["image"] = content_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
                         except:
-                            data["Зураг"] = None
-                        
-                        """Social metrics"""
-                        social_div = element.find_element(self.select_by.CSS_SELECTOR, "div.social-details-social-activity")
-                        lis = social_div.find_elements(self.select_by.TAG_NAME, "li")
-                        data["Хариу үйлдлийн тоо"] = lis[0].text
-                        data["Сэтгэгдэлийн тоо"] = lis[1].text.replace(" comment", "")
-                        data["Хуваалцсан тоо"] = lis[2].text.replace(" reposts", "")
+                            data["image"] = None
+                        data["key_word"] = self.query
+                        data["site"] = "linkedin"
+                        # """Social metrics"""
+                        # social_div = element.find_element(self.select_by.CSS_SELECTOR, "div.social-details-social-activity")
+                        # lis = social_div.find_elements(self.select_by.TAG_NAME, "li")
+                        # data["Хариу үйлдлийн тоо"] = lis[0].text
+                        # data["Сэтгэгдэлийн тоо"] = lis[1].text.replace(" comment", "")
+                        # data["Хуваалцсан тоо"] = lis[2].text.replace(" reposts", "")
                         self.connection.build_data(data)
+                        self.connection.insert_data()
                     except:
                         print("Мэдээлэл олдсонгүй...!", element)
                     self.driver.execute_script("arguments[0].remove();", element)
                 except:
                     break
         
-        self.connection.insert_data(collection_name = self.query, key_word = "linkedin")
+        # self.connection.insert_data()
         print("->       Ажмилттай дууслаа!      .......", self.connection.get_inserted(), "тооны мэдээ цуглалаа...!")

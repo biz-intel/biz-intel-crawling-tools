@@ -55,14 +55,18 @@ class updown:
                 news_created = bs.find('span', class_='btArticleDate').text.strip()
                 news_created = self.callback(news_created)
                 data = {}
-                data['Гарчиг'] = title, 
-                data['Зураг'] = img
-                data['Мэдээ'] = body
-                data['Холбоос'] = link
-                data['Нийтлэгдсэн огноо'] = news_created
+                data['title'] = title
+                data['image'] = img
+                data['body'] = body
+                data['link'] = link
+                data['user_name'] = None
+                data['created_date'] = news_created
+                data['key_word'] = self.query
+                data['site'] = 'updown'
                 self.connection.build_data(data)
+                self.connection.insert_data()
                 self.time.sleep(self.random(1, 3))
             except AttributeError as err:
                 continue
-        self.connection.insert_data(collection_name = self.query, key_word = "updown")
+        # self.connection.insert_data()
         print("->       Ажмилттай дууслаа!      .......", self.connection.get_inserted(), "тооны мэдээ цуглалаа...!")

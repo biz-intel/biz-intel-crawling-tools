@@ -16,14 +16,17 @@ class twitter:
                 query = query + ' -filter:'+f
         for tweet in self.sntwitter.TwitterSearchScraper(query).get_items():
             data = {
-                'Холбоос' : str(vars(tweet)['url']),
-                'Хэрэглэгчийн бүртгэлийн дугаар' : str(vars(tweet)['user'].id),
-                'Жиргээ' : str(vars(tweet)['content']),
-                'Нийтлэгдсэн огноо' : str(vars(tweet)['date'])
+                'link' : str(vars(tweet)['url']),
+                'user_name' : str(vars(tweet)['username']),
+                'body' : str(vars(tweet)['rawContent']),
+                'created_date' : str(vars(tweet)['date']),
+                'key_word' : self.query,
+                'site' : 'tweeter'
                 }
             self.connection.build_data(data)
+            self.connection.insert_data()
         if self.connection.get_inserted() == 0:
             print('->           Жиргээ олдсонгүй...!')
         else:
-            self.connection.insert_data(collection_name = self.query, key_word = "twitter")
+            self.connection.insert_data()
             print('->           Татагдсан жиргээний тоо:', self.connection.get_inserted())

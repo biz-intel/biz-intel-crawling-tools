@@ -70,7 +70,7 @@ class quora:
                         """user data"""
                         user_image_div = element.find_element(self.select_by.CLASS_NAME, "update-components-actor__image")
                         
-                        data["Хэрэглэгчийн зураг"] = user_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
+                        data["Хэрэглэгчийн image"] = user_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
                         data["Хэрэглэгчийн нэр"] = element.find_element(self.select_by.XPATH, "//span[@dir='ltr']").text.strip()
                         """ post data """
                         data["Огноо"] = self.callback(element.find_element(self.select_by.CSS_SELECTOR, "span.update-components-actor__sub-description")\
@@ -79,9 +79,9 @@ class quora:
                                                                                                                   .replace("  ", " ").replace(" .", ".").strip()
                         try:
                             content_image_div = element.find_element(self.select_by.CLASS_NAME, "update-components-image")
-                            data["Зураг"] = content_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
+                            data["image"] = content_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
                         except:
-                            data["Зураг"] = None
+                            data["image"] = None
                         
                         """Social metrics"""
                         social_div = element.find_element(self.select_by.CSS_SELECTOR, "div.social-details-social-activity")
@@ -96,5 +96,5 @@ class quora:
                 except:
                     break
         
-        self.connection.insert_data(collection_name = self.query, key_word = "quora")
+        self.connection.insert_data(t= "quora")
         print("->       Ажмилттай дууслаа!      .......", self.connection.get_inserted(), "тооны мэдээ цуглалаа...!")

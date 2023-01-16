@@ -1,5 +1,6 @@
 import os
-import pymongo
+# import pymongo
+import requests
 from dotenv import load_dotenv
 from selenium import webdriver
 
@@ -13,10 +14,10 @@ class main_configures:
         self.options.add_argument("--headless")
         self.options.add_experimental_option('excludeSwitches',['enable-logging'])
         self.options.add_experimental_option("prefs", {"profile.default_content_setting_values.notifications": 2})
-        key_words = os.getenv('key_words').split(sep=(','))
-        self.key_words = []
-        for key in key_words:
-            self.key_words.append(key.strip())
+        # key_words = os.getenv('key_words').split(sep=(','))
+        # self.key_words = []
+        # for key in key_words:
+        #     self.key_words.append(key.strip())
         self.linkedin_email = os.getenv(key='linkedin_email')
         self.linkedin_password = os.getenv(key='linkedin_password')
         
@@ -30,13 +31,13 @@ class database_configures:
     
     def __init__(self) -> None:
         load_dotenv()
-        self.myclient = pymongo.MongoClient("mongodb+srv://"+os.getenv(key = 'mongodb_username')+":"+os.getenv(key='mongodb_password')+
-                                                            "@first-cluster.hmz4mpz.mongodb.net/?retryWrites=true&w=majority")
-        self.mydatabase = self.myclient["crawl"]
+        # self.myclient = pymongo.MongoClient("mongodb+srv://"+os.getenv(key = 'mongodb_username')+":"+os.getenv(key='mongodb_password')+
+        #                                                     "@first-cluster.hmz4mpz.mongodb.net/?retryWrites=true&w=majority")
+        # self.mydatabase = self.myclient["crawl"]
         self.inserted = 0
         self.tweet_inserted = 0
         self.tweet_updated = 0
-        self.datas = []
+        self.data = {}
 
     def get_inserted(self):
         return self.inserted
@@ -47,12 +48,12 @@ class database_configures:
         self.tweet_updated = 0
 
     def build_data(self, data:dict):
-        self.datas.append(data)
-        self.inserted += 1
+        self.data = data
     
     def print_data(self):
-        print(self.datas)
+        print(self.data)
 
-    def insert_data(self, collection_name:str, key_word:str):
-        mycollection = self.mydatabase[collection_name]
-        return mycollection.insert_one({key_word : self.datas})
+    def insert_data(self):
+        response = requests.post("http://localhost:8002/insert_data", data=self.data)
+        if response.text == "Inserted...!":
+            self.inserted+=1
