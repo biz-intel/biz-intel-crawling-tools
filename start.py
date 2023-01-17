@@ -65,7 +65,7 @@ while True:
     try:
         for key_word in key_words:
             crawler.start(key_word=key_word)
-        continue
+            print(key_word, ":", "амжилттай татагдлаа...!")
     except:
         time.sleep(1800)
     data = {"status_type":"crawl_status"}
