@@ -65,7 +65,8 @@ while True:
     try:
         for key_word in key_words:
             crawler.start(key_word=key_word)
-        data = {"status_type":"crawl_status"}
-        requests.post("https://api.biz-intel.tech/status", data=data)
+        continue
     except:
         time.sleep(1800)
+    data = {"status_type":"crawl_status"}
+    requests.post("https://api.biz-intel.tech/status", data=data)
