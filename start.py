@@ -60,13 +60,14 @@ crawler = start_crawl()
 # crawler.start()
 
 while True:
-    data = requests.get("https://api.biz-intel.tech/status?status_type=crawl_status")
-    key_words = data.json()['key_words']
     try:
+        data = requests.get("https://api.biz-intel.tech/status?status_type=crawl_status")
+        key_words = data.json()['key_words']
         for key_word in key_words:
             crawler.start(key_word=key_word)
             print(key_word, ":", "амжилттай татагдлаа...!")
-    except:
+    except TypeError:
+        print("Sleeping...! for 30 minutes")
         time.sleep(1800)
     data = {"status_type":"crawl_status"}
     requests.post("https://api.biz-intel.tech/status", data=data)
