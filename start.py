@@ -66,8 +66,8 @@ while True:
         for key_word in key_words:
             crawler.start(key_word=key_word)
             print(key_word, ":", "амжилттай татагдлаа...!")
-    except TypeError:
-        print("Sleeping...! for 30 minutes")
+        data = {"status_type":"crawl_status"}
+        requests.post("https://api.biz-intel.tech/status", data=data)
+    except TypeError as err:
+        print("Sleeping...! for 30 minutes |========| error :", err)
         time.sleep(1800)
-    data = {"status_type":"crawl_status"}
-    requests.post("https://api.biz-intel.tech/status", data=data)
