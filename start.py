@@ -1,7 +1,7 @@
 import os
 import requests
 import time
-os.environ['PATH'] = r"".join('./assets/')
+# os.environ['PATH'] = r"".join('./assets/')
 # from bzi_facebook_crawl.assets.configures                       import facebook_configss
 from bzi_linkedin_crawl.assets.configures                       import linkedin_configs
 # from bzi_reddit_crawl.assets.configures                         import reddit_configs
