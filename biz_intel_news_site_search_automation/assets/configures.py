@@ -51,7 +51,7 @@ def format_date(news_created)->str:
     try:
         news_created = datetime.strftime(news_created, '%Y-%m-%d')
     except ValueError:
-        news_created = datetime.strftime(news_created, '%Y.%m.%d')
+        news_created = datetime.strftime(news_created, '%Y-%m-%d')
     except TypeError:
         try:
             news_created = datetime.strftime(datetime.strptime(news_created, '%Y-%m-%d %H:%M'), '%Y-%m-%d')
@@ -59,7 +59,7 @@ def format_date(news_created)->str:
             try:
                 news_created = datetime.strftime(datetime.strptime(news_created, '%Y-%m-%d'), '%Y-%m-%d')
             except ValueError:
-                news_created = datetime.strftime(datetime.strptime(news_created, '%Y.%m.%d'), '%Y.%m.%d')
+                news_created = datetime.strftime(datetime.strptime(news_created, '%Y.%m.%d'), '%Y-%m-%d')
     return news_created
 
 class news_configs(main_configures):

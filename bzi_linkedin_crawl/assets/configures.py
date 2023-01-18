@@ -1,7 +1,6 @@
 import os
 import sys
 import time
-import datetime
 from configs import main_configures
 from configs import database_configures
 
@@ -42,7 +41,7 @@ def format_date(post_created_date:str)->str:
     else:
         days = replace(post_created_date, "yr") * 365
     created_at = datetime.now()-timedelta(days=days)
-    return datetime.strftime(created_at, "%Y")
+    return datetime.strftime(created_at, "%Y-%m-%d")
     
 
 

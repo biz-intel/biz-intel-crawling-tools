@@ -25,7 +25,7 @@ class twitter_configs(main_configures):
         print('->   Эхэлсэн цаг:', get_time())
         
         print('->       Түлхүүр үг:', key_word)
-        twitter(sntwitter=sntwitter, connection=connection, key_word=key_word).start_download('replies','retweets', date='2023-01-01')
+        twitter(sntwitter=sntwitter, connection=connection, key_word=key_word, strftime=datetime.strftime).start_download('replies','retweets', date='2023-01-01')
 
         print('->   Дууссан цаг:', get_time())
 

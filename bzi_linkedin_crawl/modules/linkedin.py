@@ -46,59 +46,61 @@ class linkedin:
         try:
             self.driver.find_element(self.select_by.CLASS_NAME, "reusable-search-filters__no-results")
             print("->       Мэдээлэл олдсонгүй...!")
-            return
         except:
-            pass
+            reached_page_end = False
+            last_height = self.driver.execute_script("return document.body.scrollHeight")
 
-        reached_page_end = False
-        last_height = self.driver.execute_script("return document.body.scrollHeight")
+            # while not reached_page_end:
+            #     self.driver.find_element(self.select_by.XPATH, value='//body').send_keys(self.keys.END)   
+            #     self.time.sleep(self.random(1, 3))
+            #     new_height = self.driver.execute_script("return document.body.scrollHeight")
+            #     if last_height == new_height:
+            #         reached_page_end = True
+            #     else:
+            #         last_height = new_height
 
-        while not reached_page_end:
-            self.driver.find_element(self.select_by.XPATH, value='//body').send_keys(self.keys.END)   
-            self.time.sleep(self.random(1, 3))
-            new_height = self.driver.execute_script("return document.body.scrollHeight")
-            if last_height == new_height:
-                reached_page_end = True
-            else:
-                last_height = new_height
-
-        divs = self.driver.find_elements(self.select_by.CLASS_NAME, value="search-results__no-cluster-container")
-        for i in range(len(divs)):
-            while True:
-                try:
-                    element = divs[i].find_element(self.select_by.TAG_NAME, "div")
+            divs = self.driver.find_elements(self.select_by.CLASS_NAME, value="search-results__no-cluster-container")
+            for i in range(len(divs)):
+                while True:
                     try:
-                        data = {}
-                        """user data"""
-                        # user_image_div = element.find_element(self.select_by.CLASS_NAME, "update-components-actor__image")
-                        
-                        # data["user_image"] = user_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
-                        data["user_name"] = element.find_element(self.select_by.XPATH, "//span[@dir='ltr']").text.strip()
-                        """ post data """
-                        data["created_date"] = self.callback(element.find_element(self.select_by.CSS_SELECTOR, "span.update-components-actor__sub-description")\
-                                                                        .find_element(self.select_by.TAG_NAME, "span").text.replace("•", "").replace("\n", "").strip())
-                        data["body"] = element.find_element(self.select_by.CSS_SELECTOR, "span.break-words").text.replace("\n", " ").replace(" ( )", "")\
-                                                                                                                  .replace("  ", " ").replace(" .", ".").strip()
+                        element = divs[i].find_element(self.select_by.TAG_NAME, "div")
                         try:
-                            content_image_div = element.find_element(self.select_by.CLASS_NAME, "update-components-image")
-                            data["image"] = content_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
+                            data = {}
+                            """user data"""
+                            # user_image_div = element.find_element(self.select_by.CLASS_NAME, "update-components-actor__image")
+                            
+                            # data["user_image"] = user_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
+                            data["user_name"] = element.find_element(self.select_by.XPATH, "//span[@dir='ltr']").text.strip()
+                            """ post data """
+                            data["created_date"] = self.callback(element.find_element(self.select_by.CSS_SELECTOR, "span.update-components-actor__sub-description")\
+                                                                            .find_element(self.select_by.TAG_NAME, "span").text.replace("•", "").replace("\n", "").strip())
+                            data["body"] = element.find_element(self.select_by.CSS_SELECTOR, "span.break-words").text.replace("\n", " ").replace(" ( )", "")\
+                                                                                                                    .replace("  ", " ").replace(" .", ".").strip()
+                            try:
+                                content_image_div = element.find_element(self.select_by.CLASS_NAME, "update-components-image")
+                                data["image"] = content_image_div.find_element(self.select_by.TAG_NAME, "img").get_attribute("src")
+                            except:
+                                data["image"] = None
+                            data["key_word"] = self.query
+                            data["site"] = "linkedin"
+                            # """Social metrics"""
+                            # social_div = element.find_element(self.select_by.CSS_SELECTOR, "div.social-details-social-activity")
+                            # lis = social_div.find_elements(self.select_by.TAG_NAME, "li")
+                            # data["Хариу үйлдлийн тоо"] = lis[0].text
+                            # data["Сэтгэгдэлийн тоо"] = lis[1].text.replace(" comment", "")
+                            # data["Хуваалцсан тоо"] = lis[2].text.replace(" reposts", "")
+                            self.connection.build_data(data)
+                            self.connection.print_data()
+                            self.connection.insert_data()
+                            break
                         except:
-                            data["image"] = None
-                        data["key_word"] = self.query
-                        data["site"] = "linkedin"
-                        # """Social metrics"""
-                        # social_div = element.find_element(self.select_by.CSS_SELECTOR, "div.social-details-social-activity")
-                        # lis = social_div.find_elements(self.select_by.TAG_NAME, "li")
-                        # data["Хариу үйлдлийн тоо"] = lis[0].text
-                        # data["Сэтгэгдэлийн тоо"] = lis[1].text.replace(" comment", "")
-                        # data["Хуваалцсан тоо"] = lis[2].text.replace(" reposts", "")
-                        self.connection.build_data(data)
-                        self.connection.insert_data()
-                    except:
-                        print("Мэдээлэл олдсонгүй...!", element)
-                    self.driver.execute_script("arguments[0].remove();", element)
-                except:
-                    break
-        
-        # self.connection.insert_data()
-        print("->       Ажмилттай дууслаа!      .......", self.connection.get_inserted(), "тооны мэдээ цуглалаа...!")
+                            print("Мэдээлэл олдсонгүй...!", element)
+                        self.driver.execute_script("arguments[0].remove();", element)
+                    except Exception as err:
+                        print(err)
+                        return
+                        break
+                break
+            
+            # self.connection.insert_data()
+            print("->       Ажмилттай дууслаа!      .......", self.connection.get_inserted(), "тооны мэдээ цуглалаа...!")

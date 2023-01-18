@@ -55,5 +55,6 @@ class database_configures:
 
     def insert_data(self):
         response = requests.post("https://api.biz-intel.tech/insert_data", data=self.data)
+        print(response.text[:1000:])
         if response.text == "Inserted...!":
             self.inserted+=1
