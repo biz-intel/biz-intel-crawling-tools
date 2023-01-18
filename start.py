@@ -13,7 +13,7 @@ class start_crawl:
 
     def __init__(self):
         self.configures = { 
-                            'news'      :   news_configs(),
+                            # 'news'      :   news_configs(),
                             # 'facebook'  :   facebook_configs(),
                             'linkedin'  :   linkedin_configs(),
                             # 'reddit'    :   reddit_configs(),
@@ -66,8 +66,9 @@ while True:
         for key_word in key_words:
             crawler.start(key_word=key_word)
             print(key_word, ":", "амжилттай татагдлаа...!")
-        data = {"status_type":"crawl_status"}
-        requests.post("https://api.biz-intel.tech/status", data=data)
+        # data = {"status_type":"crawl_status"}
+        # requests.post("https://api.biz-intel.tech/status", data=data)
     except TypeError as err:
         print("Sleeping...! for 30 minutes |========| error :", err)
         time.sleep(1800)
+    break
