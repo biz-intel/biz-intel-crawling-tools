@@ -16,13 +16,13 @@ class linkedin:
     def start_download(self):
         def wait(duration = 30):
             self.driver.implicitly_wait(duration)
-        self.driver.get('https://linkedin.com')
+        self.driver.get('https://linkedin.com/login')
 
         wait(duration = 180)
-        form = self.driver.find_element(by=self.select_by.CSS_SELECTOR, value="form.sign-in-form")     
-        email_form = form.find_element(by=self.select_by.NAME, value="session_key")
-        password_form = form.find_element(by=self.select_by.NAME, value="session_password")
-        login = form.find_element(by=self.select_by.CLASS_NAME, value='sign-in-form__submit-button')
+        # form = self.driver.find_element(by=self.select_by.CSS_SELECTOR, value="form.sign-in-form")
+        email_form = self.driver.find_element(by=self.select_by.NAME, value="session_key")
+        password_form = self.driver.find_element(by=self.select_by.NAME, value="session_password")
+        login = self.driver.find_element(by=self.select_by.TAG_NAME, value='button')
         email_form.send_keys(self.email)
         password_form.send_keys(self.pass_word)
         login.click()
