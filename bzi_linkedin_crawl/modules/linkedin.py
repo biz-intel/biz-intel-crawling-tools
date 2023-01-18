@@ -28,6 +28,8 @@ class linkedin:
         login.click()
 
         wait(duration = 180)
+        self.driver.get('https://linkedin.com')
+        wait(duration = 60)
 
         search = self.driver.find_element(self.select_by.CLASS_NAME, value="search-global-typeahead__input")
         search.click()
