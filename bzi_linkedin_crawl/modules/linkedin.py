@@ -18,7 +18,7 @@ class linkedin:
             self.driver.implicitly_wait(duration)
         self.driver.get('https://linkedin.com')
 
-        wait()
+        wait(duration = 180)
         form = self.driver.find_element(by=self.select_by.CSS_SELECTOR, value="form.sign-in-form")     
         email_form = form.find_element(by=self.select_by.NAME, value="session_key")
         password_form = form.find_element(by=self.select_by.NAME, value="session_password")
@@ -27,20 +27,20 @@ class linkedin:
         password_form.send_keys(self.pass_word)
         login.click()
 
-        wait()
+        wait(duration = 180)
 
         search = self.driver.find_element(self.select_by.CLASS_NAME, value="search-global-typeahead__input")
         search.click()
         search.send_keys(self.query)
         search.send_keys(self.keys.ENTER)
 
-        wait()
+        wait(duration = 180)
 
         filter_div = self.driver.find_element(self.select_by.CLASS_NAME, value="search-reusables__filters-bar-grouping")
         posts = filter_div.find_elements(self.select_by.TAG_NAME, value="li")[0]
         posts.click()
 
-        wait()
+        wait(duration = 180)
         try:
             self.driver.find_element(self.select_by.CLASS_NAME, "reusable-search-filters__no-results")
             print("->       Мэдээлэл олдсонгүй...!")

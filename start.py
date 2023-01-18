@@ -1,7 +1,7 @@
 import os
 import requests
 import time
-# os.environ['PATH'] = r"".join('./assets/')
+os.environ['PATH'] = r"".join('./assets/')
 # from bzi_facebook_crawl.assets.configures                       import facebook_configss
 from bzi_linkedin_crawl.assets.configures                       import linkedin_configs
 # from bzi_reddit_crawl.assets.configures                         import reddit_configs
@@ -25,23 +25,23 @@ class start_crawl:
         for configure in self.configures.values():
             configure.start(key_word)
 
-    # def run_news(self):
-    #     self.configures['news'].run()
+    def run_news(self):
+        self.configures['news'].run()
 
-    # def run_facebook(self):
-    #     self.configures['facebook'].run()
+    def run_facebook(self):
+        self.configures['facebook'].run()
 
-    # def run_linkedin(self):
-    #     self.configures['linkedin'].run()
+    def run_linkedin(self):
+        self.configures['linkedin'].run()
 
-    # def run_twitter(self):
-    #     self.configures['twitter'].run()
+    def run_twitter(self):
+        self.configures['twitter'].run()
 
-    # def run_reddit(self):
-    #     self.configures['reddit'].run()
+    def run_reddit(self):
+        self.configures['reddit'].run()
 
-    # def run_quora(self):
-    #     self.configures['quora'].run()
+    def run_quora(self):
+        self.configures['quora'].run()
         
 crawler = start_crawl()
 

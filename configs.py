@@ -14,10 +14,10 @@ class main_configures:
         self.options.add_argument("--headless")
         self.options.add_experimental_option('excludeSwitches',['enable-logging'])
         self.options.add_experimental_option("prefs", {"profile.default_content_setting_values.notifications": 2})
-        # key_words = os.getenv('key_words').split(sep=(','))
-        # self.key_words = []
-        # for key in key_words:
-        #     self.key_words.append(key.strip())
+        key_words = os.getenv('key_words').split(sep=(','))
+        self.key_words = []
+        for key in key_words:
+            self.key_words.append(key.strip())
         self.linkedin_email = os.getenv(key='linkedin_email')
         self.linkedin_password = os.getenv(key='linkedin_password')
         
