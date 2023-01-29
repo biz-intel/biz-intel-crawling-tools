@@ -13,9 +13,9 @@ class start_crawl:
 
     def __init__(self):
         self.configures = { 
-                            # 'news'      :   news_configs(),
+                            'news'      :   news_configs(),
                             # 'facebook'  :   facebook_configs(),
-                            'linkedin'  :   linkedin_configs(),
+                            # 'linkedin'  :   linkedin_configs(),
                             # 'reddit'    :   reddit_configs(),
                             # 'quora'     :   quora_configs(),
                             'twitter'   :   twitter_configs(),
